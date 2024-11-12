@@ -1,55 +1,14 @@
-<script>
-import axios from 'axios';
-
-
-export default {
-  name: 'Single_Manga',
-  props: ['manga'],
-  data() {
-    return {
-      base_url: 'http://localhost:8000/',
-      mangas: [],
-      loading: false,
-      currentPage: 1,
-      filteredMangas: [],
-      totalPages: 0,
-      filterQuery: ''
-    }
-  },
-  mounted() {
-    this.getMangas();
-
-  },
-  methods: {
-    getMangas() {
-      this.loading = true; // Imposta loading a true prima di fare la richiesta
-      const url = `${this.base_url}api/mangas?page=${this.currentPage}`;
-      axios.get(url)
-        .then(response => {
-          console.log("Risposta dell'API:", response.data);
-          // Accedi ai dati dei manga correttamente
-          this.mangas = response.data.mangas.data; // Assicurati di accedere ai dati correttamente
-          this.totalPages = response.data.mangas.last_page; // Assicurati di accedere a last_page se presente
-          this.filteredMangas = this.mangas; // Inizializza filteredMangas
-        })
-        .catch(error => {
-          console.error("Si è verificato un errore durante il recupero dei manga:", error);
-        })
-        .finally(() => {
-          this.loading = false; // Imposta loading a false alla fine
-        });
-    }
-
-  }
-}
-
-</script>
-
 <template>
   <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
       <img :src="manga.cover_image" class="card-img-top img-fluid" alt=""
-        style=" object-fit: cover; border-radius: 10px 10px 0 0;">
+        style="object-fit: cover; border-radius: 10px 10px 0 0;">
+        <i 
+        :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" 
+        @click="toggleLike" 
+        :style="iconStyle" 
+        style="cursor: pointer;"
+      ></i>
     </div>
     <div class="card-body">
       <h6 class="card-title pb-2 text-center">{{ manga.title }}</h6>
@@ -59,16 +18,11 @@ export default {
         </div>
         <div class="col-12 d-flex justify-content-center">
           <button class="addToCart mt-2">Aggiungi al carrello</button>
-          <!-- <div class="input-group mb-3">
-            <input type="number" class="form-control" v-model="quantity" min="1" max="10" ref="quantityInput">
-            <div class="input-group-append">
-              <button class="btn btn-primary" @click="addToCart(dish, quantity)">+</button>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
   </div>
+
   <!-- confirm box -->
   <div id="confirm" style="display: none;">
     <p id="confirm-message"></p>
@@ -82,23 +36,85 @@ export default {
   </div>
 </template>
 
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'Single_Manga',
+  props: ['manga'],
+  data() {
+    return {
+      base_url: 'http://localhost:8000/',
+      mangas: [],
+      loading: false,
+      currentPage: 1,
+      filteredMangas: [],
+      totalPages: 0,
+      filterQuery: '',
+      isLiked: false
+    }
+  },
+  mounted() {
+    this.getMangas();
+  },
+  methods: {
+    getMangas() {
+      this.loading = true; // Imposta loading a true prima di fare la richiesta
+      const url = `${this.base_url}api/mangas?page=${this.currentPage}`;
+      axios.get(url)
+        .then(response => {
+          console.log("Risposta dell'API:", response.data);
+          this.mangas = response.data.mangas.data; // Assicurati di accedere ai dati correttamente
+          this.totalPages = response.data.mangas.last_page; // Assicurati di accedere a last_page se presente
+          this.filteredMangas = this.mangas; // Inizializza filteredMangas
+        })
+        .catch(error => {
+          console.error("Si è verificato un errore durante il recupero dei manga:", error);
+        })
+        .finally(() => {
+          this.loading = false; // Imposta loading a false alla fine
+        });
+    },
+
+    toggleLike() {
+      this.isLiked = !this.isLiked; // Inverti lo stato quando viene cliccato
+    }
+  },
+  computed: {
+    iconStyle() {
+      return {
+        backgroundColor: 'black', // Colore di sfondo nero
+        borderRadius: '50%', // Rende il bordo arrotondato
+        padding: '0.5rem', // Padding per il bordo
+        display: 'inline-block', // Per permettere il padding e il bordo
+        color: this.isLiked ? 'red' : 'black', // Colore dell'icona
+      };
+    }
+  }
+}
+</script>
 
 <style scoped>
+.fa-heart {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem; /* Dimensione dell'icona */
+  transition: color 0.3s ease; /* Transizione per il colore */
+}
 
-
-.addToCart{
-  background-color:rgb(250, 0, 83);
+.addToCart {
+  background-color: rgb(250, 0 , 83);
   color: white;
   border-radius: 2rem;
   padding: 0.5rem 1rem;
   border: none;
 }
 
-.addToCart:hover{
+.addToCart:hover {
   background-color: black;
   color: white;
 }
-
 
 #confirm,
 #info {
