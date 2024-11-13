@@ -50,10 +50,10 @@
 </script>
 <template>
     <div v-if="mangas.length > 0">
-        <div class="container" style="background-color:  rgb(250, 0, 83);">
+        <div class="container" style="background-color: rgb(250, 0, 83);">
             <hr>
             <div class="row mt-5">
-                <div class="col-md-12">
+                <div class="col-12">
                     <!-- manga list -->
                     <div class="card-container">
                         <div v-for="manga in mangas" :key="manga.id" class="card-wrapper">
@@ -66,17 +66,29 @@
     </div>
     <LoadingScreen v-if="loading" />
 </template>
-
 <style scoped>
 .card-container {
     display: flex;
-    flex-wrap: wrap; /* Permette alle card di andare a capo se non c'è spazio */
-    justify-content: space-between; /* Spazio uniforme tra le card */
-    gap: 1rem; /* Spazio di 1rem tra le card */
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    gap: 1rem;
 }
 
 .card-wrapper {
-    width: calc((100% / 5) - 1rem); /* Calcola la larghezza per 5 card per fila, sottraendo lo spazio */
-    margin-bottom: 2rem; /* Spazio tra le righe di card */
+    width: calc((100% / 4) - 1rem); 
+    margin-bottom: 2rem;
+}
+
+/* Responsività */
+@media (max-width: 768px) {
+    .card-wrapper {
+        width: calc((100% / 2) - 1rem);
+    }
+}
+
+@media (max-width: 576px) {
+    .card-wrapper {
+        width: 100%; 
+    }
 }
 </style>
