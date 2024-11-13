@@ -1,41 +1,3 @@
-<template>
-  <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
-    <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
-      <img :src="manga.cover_image" class="card-img-top img-fluid" alt=""
-        style="object-fit: cover; border-radius: 10px 10px 0 0;">
-        <i 
-        :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" 
-        @click="toggleLike" 
-        :style="iconStyle" 
-        style="cursor: pointer;"
-      ></i>
-    </div>
-    <div class="card-body">
-      <h6 class="card-title pb-2 text-center">{{ manga.title }}</h6>
-      <div class="row">
-        <div class="col-12 text-center">
-          <p class="card-text"><b>€{{ manga.price }}</b></p>
-        </div>
-        <div class="col-12 d-flex justify-content-center">
-          <button class="addToCart mt-2">Aggiungi al carrello</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- confirm box -->
-  <div id="confirm" style="display: none;">
-    <p id="confirm-message"></p>
-    <button class="m-1 btn btn-primary" id="yes-button">Sì</button>
-    <button class="m-1 btn btn-secondary" id="no-button">No</button>
-  </div>
-  <!-- alert -->
-  <div id="info" style="display: none;">
-    <p id="info-message"></p>
-    <button class="m-1 btn btn-primary" id="okey-button">Chiudi</button>
-  </div>
-</template>
-
 <script>
 import axios from 'axios';
 
@@ -59,48 +21,88 @@ export default {
   },
   methods: {
     getMangas() {
-      this.loading = true; // Imposta loading a true prima di fare la richiesta
+      this.loading = true; 
       const url = `${this.base_url}api/mangas?page=${this.currentPage}`;
       axios.get(url)
         .then(response => {
           console.log("Risposta dell'API:", response.data);
-          this.mangas = response.data.mangas.data; // Assicurati di accedere ai dati correttamente
-          this.totalPages = response.data.mangas.last_page; // Assicurati di accedere a last_page se presente
-          this.filteredMangas = this.mangas; // Inizializza filteredMangas
+          this.mangas = response.data.mangas.data; 
+          this.totalPages = response.data.mangas.last_page; 
+          this.filteredMangas = this.mangas;
         })
         .catch(error => {
           console.error("Si è verificato un errore durante il recupero dei manga:", error);
         })
         .finally(() => {
-          this.loading = false; // Imposta loading a false alla fine
         });
     },
 
     toggleLike() {
-      this.isLiked = !this.isLiked; // Inverti lo stato quando viene cliccato
+      this.isLiked = !this.isLiked; 
     }
   },
   computed: {
     iconStyle() {
       return {
-        backgroundColor: 'black', // Colore di sfondo nero
-        borderRadius: '50%', // Rende il bordo arrotondato
-        padding: '0.5rem', // Padding per il bordo
-        display: 'inline-block', // Per permettere il padding e il bordo
-        color: this.isLiked ? 'red' : 'black', // Colore dell'icona
+        backgroundColor: 'black', 
+        borderRadius: '50%', 
+        padding: '0.5rem',
+        display: 'inline-block',
+        color: this.isLiked ? 'red' : 'black', 
       };
     }
   }
 }
 </script>
 
+<template>
+  <router-link :to="`/manga/${manga.slug}`" style="text-decoration: none; color: inherit;">
+    <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
+      <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
+        <img :src="manga.cover_image" class="card-img-top img-fluid" alt=""
+          style="object-fit: cover; border-radius: 10px 10px 0 0;">
+        <i 
+          :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" 
+          @click.stop="toggleLike" 
+          :style="iconStyle" 
+          style="cursor: pointer;"
+        ></i>
+      </div>
+      <div class="card-body">
+        <h6 class="card-title pb-2 text-center">{{ manga.title }}</h6>
+        <div class="row">
+          <div class="col-12 text-center">
+            <p class="card-text"><b>€{{ manga.price }}</b></p>
+          </div>
+          <div class="col-12 d-flex justify-content-center">
+            <button class="addToCart mt-2">Aggiungi al carrello</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </router-link>
+
+  <!-- confirm box -->
+  <div id="confirm" style="display: none;">
+    <p id="confirm-message"></p>
+    <button class="m-1 btn btn-primary" id="yes-button">Sì</button>
+    <button class="m-1 btn btn-secondary" id="no-button">No</button>
+  </div>
+  <!-- alert -->
+  <div id="info" style="display: none;">
+    <p id="info-message"></p>
+    <button class="m-1 btn btn-primary" id="okey-button">Chiudi</button>
+  </div>
+</template>
+
+
 <style scoped>
 .fa-heart {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  font-size: 1.5rem; /* Dimensione dell'icona */
-  transition: color 0.3s ease; /* Transizione per il colore */
+  font-size: 1.5rem; 
+  transition: color 0.3s ease; 
 }
 
 .addToCart {
