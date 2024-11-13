@@ -50,26 +50,27 @@ export default {
         display: 'inline-block',
         color: this.isLiked ? 'red' : 'black', 
       };
+    },
+    truncatedTitle() {
+    const maxLength = 30; // Imposta il numero massimo di caratteri
+    if (this.manga.title.length > maxLength) {
+      return this.manga.title.substring(0, maxLength) + '...'; // Aggiungi "..." se supera la lunghezza
     }
+    return this.manga.title; // Restituisci il titolo originale se è sotto la lunghezza massima
+  }
   }
 }
 </script>
 
 <template>
-  <router-link :to="`/manga/${manga.slug}`" style="text-decoration: none; color: inherit;">
-    <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
+  <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
+    <router-link :to="`/manga/${manga.slug}`" style="text-decoration: none; color: inherit;">
       <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
         <img :src="manga.cover_image" class="card-img-top img-fluid" alt=""
           style="object-fit: cover; border-radius: 10px 10px 0 0;">
-        <i 
-          :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" 
-          @click.stop="toggleLike" 
-          :style="iconStyle" 
-          style="cursor: pointer;"
-        ></i>
       </div>
       <div class="card-body">
-        <h6 class="card-title pb-2 text-center">{{ manga.title }}</h6>
+        <h6 class="card-title pb-2 text-center">{{ truncatedTitle }}</h6>
         <div class="row">
           <div class="col-12 text-center">
             <p class="card-text"><b>€{{ manga.price }}</b></p>
@@ -79,22 +80,27 @@ export default {
           </div>
         </div>
       </div>
-    </div>
-  </router-link>
+    </router-link>
+    <i 
+      :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" 
+      @click.stop="toggleLike" 
+      :style="iconStyle" 
+      style="cursor: pointer;"
+    ></i>
 
-  <!-- confirm box -->
-  <div id="confirm" style="display: none;">
-    <p id="confirm-message"></p>
-    <button class="m-1 btn btn-primary" id="yes-button">Sì</button>
-    <button class="m-1 btn btn-secondary" id="no-button">No</button>
-  </div>
-  <!-- alert -->
-  <div id="info" style="display: none;">
-    <p id="info-message"></p>
-    <button class="m-1 btn btn-primary" id="okey-button">Chiudi</button>
+    <!-- confirm box -->
+    <div id="confirm" style="display: none;">
+      <p id="confirm-message"></p>
+      <button class="m-1 btn btn-primary" id="yes-button">Sì</button>
+      <button class="m-1 btn btn-secondary" id="no-button">No</button>
+    </div>
+    <!-- alert -->
+    <div id="info" style="display: none;">
+      <p id="info-message"></p>
+      <button class="m-1 btn btn-primary" id="okey-button">Chiudi</button>
+    </div>
   </div>
 </template>
-
 
 <style scoped>
 .fa-heart {
@@ -102,15 +108,15 @@ export default {
   top: 0.5rem;
   right: 0.5rem;
   font-size: 1.5rem; 
-  transition: color 0.3s ease; 
+  transition: color 0.3s ease; /* Transizione per il colore */
 }
 
 .addToCart {
-  background-color: rgb(250, 0 , 83);
-  color: white;
-  border-radius: 2rem;
-  padding: 0.5rem 1rem;
-  border: none;
+    padding: 1rem 2rem;
+    background-color: rgb(250, 0, 83);
+    border-radius: 2rem;
+    border: none;
+    color: white;
 }
 
 .addToCart:hover {
