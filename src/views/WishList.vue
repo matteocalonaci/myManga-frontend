@@ -10,44 +10,10 @@
       }
     },
     methods: {
-      removeFromWishList(item) {
-        Swal.fire({
-          title: 'Sei sicuro?',
-          text: `Vuoi rimuovere ${item.title} dalla wishlist?`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sì, rimuovi!',
-          cancelButtonText: 'Annulla'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            const index = this.wishList.findIndex(existingItem => existingItem.id === item.id);
-            if (index !== -1) {
-              this.wishList.splice(index, 1);
-              this.updateLocalStorage();
-              Swal.fire(
-                'Rimosso!',
-                `${item.title} è stato rimosso dalla wishlist.`,
-                'success'
-              );
-            } else {
-              Swal.fire(
-                'Errore!',
-                `${item.title} non è nella wishlist.`,
-                'error'
-              );
-            }
-          }
-        });
-      },
-      addToCart(item) {
-        console.log(`${item.title} aggiunto al carrello!`);
-      },
-      updateLocalStorage() {
-        // Logica per aggiornare il local storage
-        localStorage.setItem('wishlist', JSON.stringify(this.wishList));
-      }
+        removeFromWishList(item) {
+      store.removeFromWishList(item); // Chiama la funzione dal store
+    },
+
     }
   }
   </script>
@@ -67,7 +33,9 @@
               </div>
             </router-link>
             <div class="button-container">
-              <button class="removeFromWishList" @click.stop="removeFromWishList(item)"><i class="fa-solid fa-trash"></i></button>
+              <button class="removeFromWishList" @click.stop="removeFromWishList(item)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
               <button class="addToCart" @click.stop="addToCart(item)">Aggiungi al Carrello <i class="fa-solid fa-cart-shopping"></i></button>
             </div>
           </div>
