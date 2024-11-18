@@ -10,6 +10,7 @@ import AppFaq from "./views/AppFAQ.vue";
 import Cart from "./components/Cart.vue";
 import Checkout from "./components/checkout.vue";
 import AppThanksOrder from './Views/AppThanksOrder.vue';
+import WishList from "./views/WishList.vue";
 import Not_found from "./views/Not_found.vue";
 
 
@@ -80,6 +81,11 @@ const router = createRouter({
       path: "/:pathMatch(.*)*",
       name: "not_found",
       component: Not_found,
+    },
+    {
+      path: "/wish-list",
+      name: "WishList",
+      component: WishList,
     },
   ],
 });
