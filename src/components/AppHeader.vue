@@ -1,38 +1,25 @@
-<script>
-// import { eventBus } from '@/eventBus';
-import LoadingScreen from './LoadingScreen.vue';
-
-export default {
-  name: 'AppHeader',
-  components: { LoadingScreen },
-
-  data() {
-    return {
-      cartItemCount: 0,
-      isCartEmpty: true,
-      isOpen: false,
-      restaurant: null, // add a data property to store the restaurant
-      loading: false,
-
-    };
-  },
-  mounted() {
-
-  }
-}
-</script>
-
+      <script>
+      import LoadingScreen from './LoadingScreen.vue';
+      import { store } from '../store';
+      
+      export default {
+        name: 'AppHeader',
+        components: { LoadingScreen },
+      
+        computed: {
+          wishList() {
+            return store.wishList;
+          },
+          wishListCount() {
+            return this.wishList.length;
+          }
+        }
+      }
+      </script>
 <template>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-
   <nav class="navbar navbar-expand-sm">
     <div class="container-fluid">
-
       <img class="logo" src="../assets/img/kana_logo.jpeg" alt="">
-
-
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
         aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,32 +28,27 @@ export default {
 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <div class="menu-mobile  d-flex justify-content-between">
-
+          <div class="menu-mobile d-flex justify-content-between">
             <div>
-              <span class="nav-item">
-                <a href="#"> <i class="fa-solid fa-house"></i> Home</a>
-              </span>
-              
-              <span class="nav-item">
-                <a href=""> <i class="fa-regular fa-heart"></i> Lista desideri</a>
-              </span>
+              <router-link to="/" @click="notify('Sei tornato alla Home!')">
+                <i class="fa-solid fa-cart-shopping"></i> Home
+              </router-link>
 
-              <span class="nav-item">
-                <a href=""><i class="fa-solid fa-cart-shopping"></i> Carrello</a>
-              </span>
+              <router-link to="/wish-list" @click="notify('Hai aperto la tua lista desideri!')">
+                <i class="fa-regular fa-heart" :class="{ 'animate-heart': wishListCount > 0 }"></i>
+                Lista desideri (<span class="wishlist-count">{{ wishListCount }}</span>)
+              </router-link>
 
-
+              <router-link to="/cart" @click="notify('Hai aperto il carrello!')">
+                <i class="fa-solid fa-cart-shopping"></i> Carrello
+              </router-link>
             </div>
-
           </div>
         </div>
       </div>
     </div>
   </nav>
   <LoadingScreen v-if="loading" />
-
-
 </template>
 
 
@@ -127,12 +109,11 @@ img {
   background-color: rgba(250, 0, 83, 0.384);
   border-radius: 1rem;
   padding: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Esempio di box-shadow */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 button {
   color: #bb2d3b;
   border-color: #bb2d3b;
 }
-
 </style>

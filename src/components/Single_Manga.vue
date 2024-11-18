@@ -1,9 +1,10 @@
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   name: 'Single_Manga',
-  props: ['manga'],
+  props: ['manga', 'wishList'],
   data() {
     return {
       base_url: 'http://localhost:8000/',
@@ -13,21 +14,18 @@ export default {
       filteredMangas: [],
       totalPages: 0,
       filterQuery: '',
-      isLiked: false
+      isLiked: false,
     }
-  },
-  mounted() {
-    this.getMangas();
   },
   methods: {
     getMangas() {
-      this.loading = true; 
+      this.loading = true;
       const url = `${this.base_url}api/mangas?page=${this.currentPage}`;
       axios.get(url)
         .then(response => {
-          console.log("Risposta dell'API:", response.data);
-          this.mangas = response.data.mangas.data; 
-          this.totalPages = response.data.mangas.last_page; 
+          //console.log("Risposta dell'API:", response.data);
+          this.mangas = response.data.mangas.data;
+          this.totalPages = response.data.mangas.last_page;
           this.filteredMangas = this.mangas;
         })
         .catch(error => {
@@ -38,26 +36,53 @@ export default {
     },
 
     toggleLike() {
-      this.isLiked = !this.isLiked; 
-    }
+      this.isLiked = !this.isLiked;
+      if (this.isLiked) {
+        this.addWishList();
+      } else {
+        this.removeWishList();
+      }
+    },
+
+      addWishList() {
+        // Emit an event to the parent to add the manga to the wishlist
+        this.$emit('add-to-wishlist', this.manga);
+      },
+
+      removeWishList() {
+        // Emit an event to the parent to remove the manga from the wishlist
+        this.$emit('remove-from-wishlist', this.manga);
+      },
+      getWishList() {
+        // Check if the manga is already in the passed wishList prop
+        this.isLiked = this.wishList.some(item => item.id === this.manga.id);
+      },
+    },
+
+
+  mounted() {
+    this.getMangas();
+    this.getWishList();
+    this.isLiked = this.wishList.some(item => item.id === this.manga.id);
+
   },
   computed: {
     iconStyle() {
       return {
-        backgroundColor: 'black', 
-        borderRadius: '50%', 
+        backgroundColor: 'black',
+        borderRadius: '50%',
         padding: '0.5rem',
         display: 'inline-block',
-        color: this.isLiked ? 'red' : 'black', 
+        color: this.isLiked ? 'red' : 'black',
       };
     },
     truncatedTitle() {
-    const maxLength = 30; // Imposta il numero massimo di caratteri
-    if (this.manga.title.length > maxLength) {
-      return this.manga.title.substring(0, maxLength) + '...'; // Aggiungi "..." se supera la lunghezza
+      const maxLength = 30; // Imposta il numero massimo di caratteri
+      if (this.manga.title.length > maxLength) {
+        return this.manga.title.substring(0, maxLength) + '...'; // Aggiungi "..." se supera la lunghezza
+      }
+      return this.manga.title; // Restituisci il titolo originale se è sotto la lunghezza massima
     }
-    return this.manga.title; // Restituisci il titolo originale se è sotto la lunghezza massima
-  }
   }
 }
 </script>
@@ -81,12 +106,8 @@ export default {
         </div>
       </div>
     </router-link>
-    <i 
-      :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" 
-      @click.stop="toggleLike" 
-      :style="iconStyle" 
-      style="cursor: pointer;"
-    ></i>
+    <i :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" @click.stop="toggleLike"
+      :style="iconStyle" style="cursor: pointer;"></i>
 
     <!-- confirm box -->
     <div id="confirm" style="display: none;">
@@ -107,16 +128,17 @@ export default {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  font-size: 1.5rem; 
-  transition: color 0.3s ease; /* Transizione per il colore */
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+  /* Transizione per il colore */
 }
 
 .addToCart {
-    padding: 1rem 2rem;
-    background-color: rgb(250, 0, 83);
-    border-radius: 2rem;
-    border: none;
-    color: white;
+  padding: 0.5rem 2rem;
+  background-color: rgb(250, 0, 83);
+  border-radius: 2rem;
+  border: none;
+  color: white;
 }
 
 .addToCart:hover {

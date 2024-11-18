@@ -15,7 +15,7 @@ export default {
 
 <!-- HTML -->
 <template>
-    >
+    
     <p class="mt-5"><b>ERROR 404 PAGE NOT FOUND</b>
     </p>
 
