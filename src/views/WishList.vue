@@ -1,45 +1,236 @@
-<!-- JS -->
-<script>
-import { store } from '../store'; // Adjust the path as necessary
-
-export default {
-  name: "WishList",
-  computed: {
-    wishList() {
-      return store.wishList; // Access the shared wishlist
+  <script>
+  import Swal from 'sweetalert2'; // Importa SweetAlert2
+  import { store } from '../store'; // Adjust the path as necessary
+  
+  export default {
+    name: "WishList",
+    computed: {
+      wishList() {
+        return store.wishList; 
+      }
+    },
+    methods: {
+      removeFromWishList(item) {
+        Swal.fire({
+          title: 'Sei sicuro?',
+          text: `Vuoi rimuovere ${item.title} dalla wishlist?`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sì, rimuovi!',
+          cancelButtonText: 'Annulla'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const index = this.wishList.findIndex(existingItem => existingItem.id === item.id);
+            if (index !== -1) {
+              this.wishList.splice(index, 1);
+              this.updateLocalStorage();
+              Swal.fire(
+                'Rimosso!',
+                `${item.title} è stato rimosso dalla wishlist.`,
+                'success'
+              );
+            } else {
+              Swal.fire(
+                'Errore!',
+                `${item.title} non è nella wishlist.`,
+                'error'
+              );
+            }
+          }
+        });
+      },
+      addToCart(item) {
+        console.log(`${item.title} aggiunto al carrello!`);
+      },
+      updateLocalStorage() {
+        // Logica per aggiornare il local storage
+        localStorage.setItem('wishlist', JSON.stringify(this.wishList));
+      }
     }
   }
-}
-</script>
-
-
-<!-- HTML -->
+  </script>
 <template>
-    <div>
-      <p class="mt-5"><b>Wish List</b></p>
-      <div v-if="wishList.length > 0">
-        <ul>
-          <li v-for="item in wishList" :key="item.id">{{ item.title }}</li>
-        </ul>
+    <div class="wishlist-container">
+      <h2 class="wishlist-title">Wish List</h2>
+      <div v-if="wishList.length > 0" class="card-container">
+        <div class="card-wrapper" v-for="item in wishList" :key="item.id">
+          <div class="card">
+            <router-link :to="`/manga/${item.slug}`" class="card-link">
+              <div class="img-container">
+                <img :src="item.cover_image" class="card-img" alt="" />
+              </div>
+              <div class="card-body">
+                <h6 class="card-title">{{ item.title }}</h6>
+                <p class="card-price">€{{ item.price }}</p>
+              </div>
+            </router-link>
+            <div class="button-container">
+              <button class="removeFromWishList" @click.stop="removeFromWishList(item)"><i class="fa-solid fa-trash"></i></button>
+              <button class="addToCart" @click.stop="addToCart(item)">Aggiungi al Carrello <i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+          </div>
+        </div>
       </div>
       <div v-else>
-        <p>La tua wishlist è vuota.</p>
+        <p class="empty-message">La tua wishlist è vuota.</p>
       </div>
-      <button>
-        <router-link :to="{ name: 'AppHome' }" class="text-white">Torna alla homepage</router-link>
-      </button>
+      <div class="controller-buttons">
+        <router-link :to="{ name: 'AppHome' }">
+          <button class="btn-home">Torna alla homepage</button>
+        </router-link>
+      </div>
     </div>
   </template>
+  
+  <style scoped>
+  .wishlist-container {
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .wishlist-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center the cards */
+    gap: 1rem;
+  }
+  
+  .card-wrapper {
+    flex: 0 0 250px; /* Fixed width for each card */
+    margin-bottom: 2rem;
+  }
+  
+  .card {
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .img-container {
+    height: 20rem;
+    overflow: hidden;
+  }
+  
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+  
+  .card-body {
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    color: #333;
+  }
+  
+  .card-price {
+    font-weight: bold;
+    color: #e91e63;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  
+  .removeFromWishList, .addToCart {
+    padding: 0.5rem 1rem;
+    border: none;
+    border: 0.1rem solid  rgb(250, 0, 83);
+    border-radius: 0.5rem;
+    color: rgb(250, 0, 83);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: white;
+  }
+  .addToCart {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: rgb(250, 0, 83);
+  }
+  
 
+  .removeFromWishList:hover {
+    background-color: black;
+    border: 0.1rem solid  black;
 
-<!-- CSS -->
-<style scoped>
-p {
-    font-size: 5rem;
-    padding: 2rem;
-}
+    color: white;
+  }
+  
 
-button {
+  
+  .addToCart:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  .empty-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+  }
+  
+  .controller-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .btn-home {
+    padding: 10px 20px;
     background-color: rgb(24, 55, 255);
-}
-</style>
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-home:hover {
+    background-color: rgb(20, 45, 200);
+  }
+  
+  @media (max-width: 768px) {
+    .card-wrapper {
+      flex: 0 0 45%; /* 2 cards per row on smaller screens */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .card-wrapper {
+      flex: 0 0 100%; /* 1 card per row on extra small screens */
+    }
+  }
+  </style>
