@@ -1,10 +1,15 @@
 <script>
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { store } from '../store'; // Assicurati che il percorso sia corretto
+import Cart from './Cart.vue'; // Assicurati che il percorso sia corretto
 
 export default {
   name: 'Single_Manga',
   props: ['manga', 'wishList'],
+  components: {
+    Cart
+  },
   data() {
     return {
       base_url: 'http://localhost:8000/',
@@ -15,7 +20,7 @@ export default {
       totalPages: 0,
       filterQuery: '',
       isLiked: false,
-    }
+    };
   },
   methods: {
     getMangas() {
@@ -23,7 +28,6 @@ export default {
       const url = `${this.base_url}api/mangas?page=${this.currentPage}`;
       axios.get(url)
         .then(response => {
-          //console.log("Risposta dell'API:", response.data);
           this.mangas = response.data.mangas.data;
           this.totalPages = response.data.mangas.last_page;
           this.filteredMangas = this.mangas;
@@ -32,6 +36,7 @@ export default {
           console.error("Si è verificato un errore durante il recupero dei manga:", error);
         })
         .finally(() => {
+          this.loading = false; // Imposta loading a false anche in caso di errore
         });
     },
 
@@ -44,28 +49,29 @@ export default {
       }
     },
 
-      addWishList() {
-        // Emit an event to the parent to add the manga to the wishlist
-        this.$emit('add-to-wishlist', this.manga);
-      },
-
-      removeWishList() {
-        // Emit an event to the parent to remove the manga from the wishlist
-        this.$emit('remove-from-wishlist', this.manga);
-      },
-      getWishList() {
-        // Check if the manga is already in the passed wishList prop
-        this.isLiked = this.wishList.some(item => item.id === this.manga.id);
-      },
+    addWishList() {
+      store.addToWishList(this.manga); // Usa il metodo del store
     },
 
+    removeWishList() {
+      store.removeFromWishList(this.manga); // Usa il metodo del store
+    },
+
+    getWishList() {
+      this.isLiked = store.wishList.some(item => item.id === this.manga.id);
+    },
+
+    addToCart(manga) {
+      store.addToCart(manga); // Usa il metodo del store
+    },
+  },
 
   mounted() {
     this.getMangas();
     this.getWishList();
-    this.isLiked = this.wishList.some(item => item.id === this.manga.id);
-
+    this.isLiked = store.wishList.some(item => item.id === this.manga.id);
   },
+
   computed: {
     iconStyle() {
       return {
@@ -78,10 +84,7 @@ export default {
     },
     truncatedTitle() {
       const maxLength = 30; // Imposta il numero massimo di caratteri
-      if (this.manga.title.length > maxLength) {
-        return this.manga.title.substring(0, maxLength) + '...'; // Aggiungi "..." se supera la lunghezza
-      }
-      return this.manga.title; // Restituisci il titolo originale se è sotto la lunghezza massima
+      return this.manga.title.length > maxLength ? this.manga.title.substring(0, maxLength) + '...' : this.manga.title;
     }
   }
 }
@@ -89,37 +92,27 @@ export default {
 
 <template>
   <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
-    <router-link :to="`/manga/${manga.slug}`" style="text-decoration: none; color: inherit;">
-      <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
+    <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
+      <router-link :to="`/manga/${manga.slug}`" style="text-decoration: none; color: inherit;" class="card-link">
         <img :src="manga.cover_image" class="card-img-top img-fluid" alt=""
           style="object-fit: cover; border-radius: 10px 10px 0 0;">
-      </div>
-      <div class="card-body">
-        <h6 class="card-title pb-2 text-center">{{ truncatedTitle }}</h6>
-        <div class="row">
-          <div class="col-12 text-center">
-            <p class="card-text"><b>€{{ manga.price }}</b></p>
-          </div>
-          <div class="col-12 d-flex justify-content-center">
-            <button class="addToCart mt-2">Aggiungi al carrello</button>
-          </div>
+      </router-link>
+    </div>
+    <div class="card-body">
+      <h6 class="card-title pb-2 text-center">{{ truncatedTitle }}</h6>
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="card-text"><b>€{{ manga.price }}</b></p>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+          <button @click.stop="addToCart(manga)" class="addToCart mt-2">Aggiungi al carrello</button>
         </div>
       </div>
-    </router-link>
-    <i :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" @click.stop="toggleLike"
-      :style="iconStyle" style="cursor: pointer;"></i>
+    </div>
+    <i :class="['fa-heart text-danger', isLiked ? 'fa-solid' : 'fa-regular']" @click.stop ="toggleLike" :style="iconStyle" style="cursor: pointer;"></i>
 
-    <!-- confirm box -->
-    <div id="confirm" style="display: none;">
-      <p id="confirm-message"></p>
-      <button class="m-1 btn btn-primary" id="yes-button">Sì</button>
-      <button class="m-1 btn btn-secondary" id="no-button">No</button>
-    </div>
-    <!-- alert -->
-    <div id="info" style="display: none;">
-      <p id="info-message"></p>
-      <button class="m-1 btn btn-primary" id="okey-button">Chiudi</button>
-    </div>
+    <!-- Carrello -->
+    <Cart />
   </div>
 </template>
 
@@ -130,7 +123,6 @@ export default {
   right: 0.5rem;
   font-size: 1.5rem;
   transition: color 0.3s ease;
-  /* Transizione per il colore */
 }
 
 .addToCart {

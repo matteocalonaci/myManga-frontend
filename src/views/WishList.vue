@@ -72,12 +72,12 @@
   .card-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Center the cards */
+    justify-content: center;
     gap: 1rem;
   }
   
   .card-wrapper {
-    flex: 0 0 250px; /* Fixed width for each card */
+    flex: 0 0 250px; 
     margin-bottom: 2rem;
   }
   
