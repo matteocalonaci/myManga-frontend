@@ -42,6 +42,9 @@
         </div>
       </div>
       <div v-else>
+        <div class="empty-img-container d-flex justify-content-center">
+            <img src="https://cdn.anisearch.it/images/character/screen/111/111318/full/625652.webp" alt="" style="width: 50rem;">
+        </div>
         <p class="empty-message">La tua wishlist è vuota.</p>
       </div>
       <div class="controller-buttons">
@@ -167,7 +170,7 @@
   .empty-message {
     text-align: center;
     font-size: 1.2rem;
-    color: #777;
+    color: #d7d7d7;
   }
   
   .controller-buttons {
