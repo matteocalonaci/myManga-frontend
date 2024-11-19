@@ -12,6 +12,7 @@ import Checkout from "./components/checkout.vue";
 import AppThanksOrder from './Views/AppThanksOrder.vue';
 import WishList from "./views/WishList.vue";
 import Not_found from "./views/Not_found.vue";
+import AppManga from "./views/AppManga.vue";
 
 
 
@@ -36,6 +37,11 @@ const router = createRouter({
       path: "/contact",
       name: "contact",
       component: AppContact,
+    },
+    {
+      path: "/manga",
+      name: "AppManga",
+      component: AppManga,
     },
     {
       path: "/manga/:slug", //add slug

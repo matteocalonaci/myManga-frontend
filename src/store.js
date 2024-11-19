@@ -1,4 +1,3 @@
-// store.js
 import { reactive } from 'vue';
 import Swal from 'sweetalert2';
 
@@ -7,7 +6,7 @@ const initialCart = JSON.parse(localStorage.getItem("cart")) || []; // Inizializ
 
 export const store = reactive({
   wishList: initialWishList,
-  cart: initialCart, // Aggiungi la proprietà per il carrello
+  cart: initialCart,
 
   addToWishList(item) {
     const exists = this.wishList.some(existingItem => existingItem.id === item.id);
@@ -52,16 +51,14 @@ export const store = reactive({
 
   updateLocalStorage() {
     localStorage.setItem("wishList", JSON.stringify(this.wishList));
-    localStorage.setItem("cart", JSON.stringify(this.cart)); // Aggiorna anche il carrello nel localStorage
+    localStorage.setItem('cart', JSON.stringify(this.cart));
   },
 
   addToCart(manga) {
-    this.selectedManga = manga; // Memorizza il manga selezionato
-    const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-    offcanvas.show(); // Mostra l'offcanvas
-    const exists = this.cart.some(existingManga => existingManga.id === manga.id);
+    console.log('Aggiungendo al carrello:', manga); // Log per il debug
+    const exists = this.cart.find(existingManga => existingManga.id === manga.id);
     if (!exists) {
-      this.cart.push(manga);
+      this.cart.push({ ...manga, quantity: 1 }); // Inizializza quantity a 1
       this.updateLocalStorage();
       console.log(`${manga.title} aggiunto al carrello.`);
     } else {
@@ -78,7 +75,7 @@ export const store = reactive({
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sì, rimuovi!',
-      cancelButtonText: 'Annulla'
+      cancelButtonText: 'annulla',
     }).then((result) => {
       if (result.isConfirmed) {
         const index = this.cart.findIndex(existingManga => existingManga.id === manga.id);
@@ -98,4 +95,20 @@ export const store = reactive({
     this.updateLocalStorage();
     console.log("Carrello svuotato.");
   },
-});
+
+  increaseQuantity(manga) {
+    const item = this.cart.find(item => item.id === manga.id);
+    if (item) {
+      item.quantity++;
+      this.updateLocalStorage(); // Aggiorna il local storage
+    }
+  },
+
+  decreaseQuantity(manga) {
+    const item = this.cart.find(item => item.id === manga.id);
+    if (item && item.quantity > 1) {
+      item.quantity--;
+      this.updateLocalStorage(); // Aggiorna il local storage }
+  }
+},
+})
