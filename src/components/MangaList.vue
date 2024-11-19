@@ -22,12 +22,12 @@ export default {
             filteredMangas: [],
             totalPages: 0,
             filterQuery: '',
-            wishList: [], // Mantieni la wishlist
+            wishList: [], 
         }
     },
     mounted() {
         this.getMangas();
-        this.getWishList(); // Carica la wishlist all'avvio
+        this.getWishList(); 
     },
     methods: {
         getMangas() {
@@ -94,7 +94,7 @@ export default {
     },
     computed: {
         currentWishList() {
-            return this.wishList; // This will automatically update when wishList changes
+            return this.wishList; 
         }
     }
 }

@@ -125,6 +125,7 @@ export default {
   transition: color 0.3s ease;
 }
 
+
 .addToCart {
   padding: 0.5rem 2rem;
   background-color: rgb(250, 0, 83);
