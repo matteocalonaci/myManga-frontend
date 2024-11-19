@@ -9,73 +9,87 @@ export default {
       return store.cart; 
     },
     cartTotal() {
-      // Calcola il totale del carrello, assicurandoti che price sia definito e sia un numero
       const total = this.cartItems.reduce((sum, item) => {
-        const price = parseFloat(item.price); // Assicurati che price sia un numero
-        return sum + (isNaN(price) ? 0 : price); // Usa 0 se price non è un numero
+        const price = parseFloat(item.price); 
+        return sum + (isNaN(price) ? 0 : price * item.quantity);
       }, 0);
-      return total.toFixed(2); // Restituisci il totale formattato
+      return total.toFixed(2); 
+    },
+    shippingCost() {
+      const thresholdForFreeShipping = 39; // Soglia per la spedizione gratuita
+      return parseFloat(this.cartTotal) < thresholdForFreeShipping ? 5.50 : 0; // Costo di spedizione
+    },
+    remainingForFreeShipping() {
+      const thresholdForFreeShipping = 39; // Soglia per la spedizione gratuita
+      return thresholdForFreeShipping - parseFloat(this.cartTotal);
     }
   },
   methods: {
     removeFromCart(manga) {
-      Swal.fire({
-        title: 'Sei sicuro?',
-        text: `Vuoi rimuovere ${manga.title} dal carrello?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sì, rimuovi!',
-        cancelButtonText: 'Annulla'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          store.removeFromCart(manga); // Rimuovi l'elemento dal carrello
-        }
-      });
+          store.removeFromCart(manga);
     },
 
     clearCart() {
-      Swal.fire({
-        title: 'Sei sicuro?',
-        text: "Vuoi svuotare il carrello?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sì, svuota!',
-        cancelButtonText: 'Annulla'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          store.clearCart(); // Svuota il carrello
-          Swal.fire('Svuotato!', 'Il carrello è stato svuotato.', 'success');
-        }
-      });
+      store.clearCart(); 
+    },
+
+    increaseQuantity(manga) {
+      store.increaseQuantity(manga);
+    },
+
+    decreaseQuantity(manga) {
+      store.decreaseQuantity(manga);
     }
   }
 }
 </script>
-
 <template>
   <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
     <div class="offcanvas-header">
-      <h5 id="cartOffcanvasLabel">Carrello</h5>
+      <h3 id="cartOffcanvasLabel" class="text-white"><b>Carrello</b></h3>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
       <p v-if="cartItems.length === 0">Il carrello è vuoto.</p>
       <ul class="list-group">
         <li v-for="manga in cartItems" :key="manga.id" class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong>{{ manga.title }}</strong>
-            <p>€{{ (parseFloat(manga.price) || 0).toFixed(2) }}</p>
+          <div class="d-flex align-items-center">
+            <img :src="manga.cover_image" alt="Immagine di {{ manga.title }}" class="manga-image" />
+            <div class="ms-3">
+              <strong>{{ manga.title }}</strong>
+              <p>€{{ (parseFloat(manga.price) || 0).toFixed(2) }} x {{ manga.quantity }}</p>
+              <div class="quantiy-btn d-flex align-items-center mb-2 mb-md-0">
+                <button @click="decreaseQuantity(manga)" class="pulsanti">-</button>
+                <span class="quantity mx-2">{{ manga.quantity }}</span>
+                <button @click="increaseQuantity(manga)" class="pulsanti">+</button>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-danger btn-sm" @click="removeFromCart(manga)">Rimuovi</button>
+          <button class="btn btn-danger btn-sm" @click="removeFromCart(manga)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
         </li>
       </ul>
       <div v-if="cartItems.length > 0" class="mt-3">
-        <h6>Totale: €{{ cartTotal }}</h6>
-        <button class="btn btn-warning" @click="clearCart">Svuota Carrello</button>
+          <h6 class="d-flex justify-content-between">Totale parziale: <span>€{{ cartTotal }}</span></h6>
+          <h6 class="d-flex justify-content-between">
+          Spedizione: 
+          <span>
+            {{ shippingCost > 0 ? '€' + shippingCost.toFixed(2) : 'Gratis' }}
+          </span>
+        </h6>          
+        <h5 class="d-flex justify-content-between">Totale: <b><span>€{{ (parseFloat(cartTotal) + shippingCost).toFixed(2) }}</span></b></h5>
+
+        <hr>
+        <h4 class="text-center" v-if="remainingForFreeShipping > 0">
+          Ti mancano ancora <b>€{{ remainingForFreeShipping.toFixed(2) }}</b> per avere la <b>spedizione gratuita!</b>
+        </h4>
+
+        <hr>
+       <div class="checkout-container-button d-flex justify-content-center">
+        <button class="checkout-button">Procedi con il checkout</button>
+       </div>
+
       </div>
     </div>
   </div>
@@ -83,7 +97,54 @@ export default {
 
 <style scoped>
 .offcanvas-body {
-  max-height: 70vh; 
+  max-height: 100vh; 
   overflow-y: auto;
+  color: white;
+  background-color: rgb(198, 23, 81);
 }
+.offcanvas-end{
+  background-color: rgb(198, 23, 81);
+}
+
+.manga-image {
+  width: 6rem; 
+  height: auto; 
+  border-radius: 5px; 
+}
+
+.quantiy-btn {
+    padding: 0.1rem 0.8rem;
+    width: 6rem;
+    border-radius: 2rem;
+    color:  rgb(250, 0, 83 );
+    border: 0.1rem solid rgb(250, 0, 83);
+}
+
+.pulsanti {
+    border: none;
+    color: rgb(250, 0, 83);
+    background-color: white;
+    font-size: 1rem;
+}
+
+.quantiy-btn:hover {
+    background-color: black;
+    color: white;
+    border: 0.1rem solid black;
+}
+
+.quantiy-btn:hover .pulsanti {
+    color: white;
+    background-color: black;
+}
+
+.checkout-button {
+    padding: 1rem 2rem;
+    background-color: rgb(250, 0, 83);
+    border-radius: 2rem;
+    border: none;
+    border: 0.1rem solid white;
+    color: white;
+}
+
 </style>

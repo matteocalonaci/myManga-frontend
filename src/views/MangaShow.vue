@@ -1,72 +1,75 @@
-<script>
-import axios from 'axios';
-import LoadingScreen from '../components/LoadingScreen.vue';
-
-export default {
-    name: 'MangaShow',
-    components: {
-        LoadingScreen,
-
-    },
-    data() {
-        return {
-            base_url: 'http://localhost:8000/',
-            manga: null,
-            loading: true,
-            isLiked: false,
+        <script>
+        import axios from 'axios';
+        import LoadingScreen from '../components/LoadingScreen.vue';
+        import Cart from '../components/Cart.vue'; 
+        import { store } from '../store'; 
+        
+        export default {
+            name: 'MangaShow',
+            components: {
+                LoadingScreen,
+                Cart,
+            },
+            data() {
+                return {
+                    base_url: 'http://localhost:8000/',
+                    manga: null,
+                    loading: true,
+                    isLiked: false,
+                    quantity: 1,
+                };
+            },
+            mounted() {
+                this.getManga();
+            },
+            methods: {
+                getManga() {
+                    const slug = this.$route.params.slug;
+                    const url = `${this.base_url}api/mangas/${slug}`;
+        
+                    axios.get(url)
+                        .then(response => {
+                            console.log("Risposta dell'API:", response.data);
+                            this.manga = response.data.manga;
+                        })
+                        .catch(error => {
+                            console.error("Si è verificato un errore durante il recupero del manga:", error);
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                },
+                toggleLike() {
+                    this.isLiked = !this.isLiked;
+                },
+                increaseQuantity() {
+                    this.quantity++;
+                },
+                decreaseQuantity() {
+                    if (this.quantity > 1) {
+                        this.quantity--;
+                    }
+                },
+                addToCart() {
+                    const mangaWithQuantity = { ...this.manga, quantity: this.quantity };
+                    store.addToCart(mangaWithQuantity);
+                    console.log(`Aggiunto ${this.quantity} di ${this.manga.title} al carrello.`);
+                },
+            },
+            computed: {
+                iconStyle() {
+                    return {
+                        backgroundColor: 'black',
+                        borderRadius: '50%',
+                        padding: '0.5rem',
+                        display: 'inline-block',
+                        color: this.isLiked ? 'red' : 'black',
+                    };
+                },
+            },
         };
-    },
-    mounted() {
-        this.getManga();
-    },
-    methods: {
-        getManga() {
-            const slug = this.$route.params.slug; // Ottieni lo slug dalla rotta
-            const url = `${this.base_url}api/mangas/${slug}`;
-
-            axios.get(url)
-                .then(response => {
-                    console.log("Risposta dell'API:", response.data);
-                    this.manga = response.data.manga;
-                })
-                .catch(error => {
-                    console.error("Si è verificato un errore durante il recupero del manga:", error);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-        toggleLike() {
-            this.isLiked = !this.isLiked;
-        },
-
-        increaseQuantity() {
-            this.quantity++;
-        },
-        decreaseQuantity() {
-            if (this.quantity > 1) {
-                this.quantity--;
-            }
-        },
-        addToCart() {
-            // Logica per aggiungere al carrello
-            console.log(`Aggiunto ${this.quantity} articoli al carrello.`);
-        }
-
-    },
-    computed: {
-        iconStyle() {
-            return {
-                backgroundColor: 'black',
-                borderRadius: '50%',
-                padding: '0.5rem',
-                display: 'inline-block',
-                color: this.isLiked ? 'red' : 'black',
-            };
-        },
-    },
-};
-</script>
+        </script>
+        
 <template>
     <LoadingScreen v-if="loading" />
 
@@ -88,31 +91,21 @@ export default {
                         <p class="card-text">
                             <span class="th">Generi:</span>
                             <span class="genres-container d-flex flex-wrap">
-                                <span class="genre" v-for="genre in manga.genres" :key="genre.id">{{ genre.name
-                                    }}</span>
+                                <span class="genre" v-for="genre in manga.genres" :key="genre.id">{{ genre.name }}</span>
                             </span>
                         </p>
                         <p class="card-text"><span class="th">Autore:</span> {{ manga.authors.name }}</p>
                         <p class="card-text"><span class="th">Volume:</span> {{ manga.volume }}</p>
-                        <p class="card-text"><span class="th">Disponibilità:</span> {{ manga.availability ?
-                            'Disponibile' : 'Non disponibile' }}</p>
-                        <p class="card-text"><span class="th">In corso? </span> {{ manga.in_progress ? 'Sì' : 'No' }}
-                        </p>
+                        <p class="card-text"><span class="th">Disponibilità:</span> {{ manga.availability ? 'Disponibile' : 'Non disponibile' }}</p>
+                        <p class="card-text"><span class="th">In corso? </span> {{ manga.in_progress ? 'Sì' : 'No' }}</p>
                         <p class="card-text"><span class="th">Anno: </span>{{ manga.year }}</p>
                         <p class="card-text"><span class="th">Categoria: </span> {{ manga.categories.name }}</p>
                         <p class="card-text"><span class="th">Editore: </span> {{ manga.editors.name }}</p>
 
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3">
-                            <div class="quantiy-btn d-flex align-items-center mb-2 mb-md-0">
-                                <button @click="decreaseQuantity" class="pulsanti">-</button>
-                                <span class="quantity mx-2">1</span>
-                                <button @click="increaseQuantity" class="pulsanti">+</button>
-                            </div>
-
-                            <button class="addToCart flex-grow-1">Aggiungi al carrello <i
-                                    class="fa-solid fa-cart-shopping"></i></button>
+                        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center mt-3">
+                            <button class="addToCart flex-grow-1" @click="addToCart">Aggiungi al carrello <i class="fa-solid fa-cart-shopping"></i></button>
                         </div>
-
+                        <Cart />
                     </div>
                 </div>
             </div>
@@ -129,6 +122,7 @@ export default {
         <p>Manga non trovato.</p>
     </div>
 </template>
+
 
 <style scoped>
 .genre {
@@ -152,7 +146,6 @@ export default {
     padding: 1rem;
     border-radius: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.377);
-    /* Aggiunta dell'ombra */
 }
 
 .th {
@@ -165,20 +158,18 @@ export default {
     border-radius: 2rem;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.377);
-    /* Aggiunta dell'ombra */
 }
 
 .img-container {
     max-height: 32.5rem;
     border-radius: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.377);
-    /* Aggiunta dell'ombra */
 }
 
 .quantiy-btn {
     padding: 1rem 2rem;
     border-radius: 2rem;
-    color:  rgb(250, 0, 83);
+    color: rgb(250, 0, 83);
     border: 0.1rem solid rgb(250, 0, 83);
 }
 
@@ -190,7 +181,7 @@ export default {
     border: none;
     color: rgb(250, 0, 83);
     background-color: white;
-    font-size: 1rem;
+ font-size: 1rem;
 }
 
 .quantiy-btn:hover {
