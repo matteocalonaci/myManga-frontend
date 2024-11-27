@@ -52,6 +52,10 @@
                 <i class="fa-solid fa-cart-shopping"></i> Home
               </router-link>
 
+              <router-link to="/manga">
+                <i class="fa-solid fa-book-open"></i> Manga
+              </router-link>
+
               <router-link to="/wish-list">
                 <i class="fa-regular fa-heart"></i>
                 Lista desideri (<span class="wishlist-count">{{ wishListCount }}</span>)
