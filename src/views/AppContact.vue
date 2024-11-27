@@ -33,7 +33,7 @@ export default {
 
 <!-- HTML -->
 <template>
-    <div class="card">
+    <div class="card m-4 p-2">
         <div class="col-6 p-4">
             <h2>Contattaci</h2>
             <p>Se hai domande, suggerimenti o semplicemente vuoi parlare di manga, non esitare a contattarci! Siamo sempre felici di ricevere feedback e di connetterci con altri appassionati.
@@ -51,7 +51,7 @@ Grazie per aver scelto myManga. Speriamo che la nostra app ti aiuti a scoprire e
         <div class="col-6 p-4">
             <form @submit.prevent="sendMessage()">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name" class="form-label">Nome</label>
                     <input type="text" class="form-control" :class="{ 'is-invalid': errors.name }" name="name" id="name"
                         aria-describedby="helpId" placeholder="" v-model="name">
 
@@ -59,7 +59,7 @@ Grazie per aver scelto myManga. Speriamo che la nostra app ti aiuti a scoprire e
                         {{ error }}
                     </p>
 
-                    <small id="nameHelper" class="form-text text-muted">Write your name</small>
+                    <small id="nameHelper" class="form-text text-muted">Scrivi il tuo nome</small>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
@@ -72,10 +72,10 @@ Grazie per aver scelto myManga. Speriamo che la nostra app ti aiuti a scoprire e
 
 
 
-                    <small id="emailHelper" class="form-text text-muted">Write your email</small>
+                    <small id="emailHelper" class="form-text text-muted">Scrivi la tua email</small>
                 </div>
                 <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
+                    <label for="message" class="form-label">Messaggio</label>
                     <textarea type="text" class="form-control" :class="{ 'is-invalid': errors.message }" name="message"
                         id="message" rows="3" placeholder="" v-model="message">
             </textarea>
@@ -84,10 +84,10 @@ Grazie per aver scelto myManga. Speriamo che la nostra app ti aiuti a scoprire e
                         {{ error }}
                     </p>
 
-                    <small id="messageHelper" class="form-text text-muted">Write your email text</small>
+                    <small id="messageHelper" class="form-text text-muted">Scrivi il tuo messaggio</small>
                 </div>
                 <button type="submit" class="btn btn-primary">
-                    SEND
+                    INVIA
                 </button>
             </form>
         </div>
@@ -104,6 +104,7 @@ Grazie per aver scelto myManga. Speriamo che la nostra app ti aiuti a scoprire e
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    border-radius: 2rem;
 }
 
 button {
