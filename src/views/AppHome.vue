@@ -1,29 +1,32 @@
 <script>
+import AppFooter from '../components/AppFooter.vue';
 import MangaList from '../components/MangaList.vue';
+
 export default {
     components: {
         MangaList,
+        AppFooter
     },
     data() {
         return {
             images: [
                 {
-                    src: 'https://via.placeholder.com/800x400?text=Immagine+1',
+                    src: 'https://mangayo.it/modules/an_homeslider/img/2de68a19ec2b1a3a03ba81f6530c03c7_1.jpg',
                     alt: 'Immagine 1',
-                    title: 'Titolo 1',
-                    description: 'Descrizione dell\'immagine 1'
+                    // title: 'Titolo 1',
+                    // description: 'Descrizione dell\'immagine 1'
                 },
                 {
-                    src: 'https://via.placeholder.com/800x400?text=Immagine+2',
+                    src: 'https://mangayo.it/modules/an_homeslider/img/328226fc6f33e1dcd8d3b669494a6f04_1.jpg',
                     alt: 'Immagine 2',
-                    title: 'Titolo 2',
-                    description: 'Descrizione dell\'immagine 2'
+                    // title: 'Titolo 2',
+                    // description: 'Descrizione dell\'immagine 2'
                 },
                 {
-                    src: 'https://via.placeholder.com/800x400?text=Immagine+3',
+                    src: 'https://mangayo.it/modules/an_homeslider/img/2697fb2f2eaa0f3d9443fc40a03bc53c_1.jpg',
                     alt: 'Immagine 3',
-                    title: 'Titolo 3',
-                    description: 'Descrizione dell\'immagine 3'
+                    // title: 'Titolo 3',
+                    // description: 'Descrizione dell\'immagine 3'
                 }
             ]
         };
@@ -34,7 +37,7 @@ export default {
 <template>
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item" v-for="(image, index) in images" :key="index" :class="{ active: index === 0 }">
+            <div class="carousel-item pt-5" v-for="(image, index) in images" :key="index" :class="{ active: index === 0 }">
                 <img :src="image.src" class="d-block w-100" :alt="image.alt">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>{{ image.title }}</h5>
@@ -116,12 +119,16 @@ export default {
 
 
     </div>
+
+    <AppFooter />
 </template>
 
 
 <style scoped>
 .carousel-item img {
     height: 400px;
+    max-height: 13rem;
+    width: 100%;
     /* Imposta l'altezza desiderata per le immagini */
 }
 
@@ -157,5 +164,32 @@ export default {
     right: 0.5rem;
     font-size: 1.5rem;
     transition: color 0.3s ease;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    flex: 1 1 calc(25% - 1rem); /* Usa flexbox per un layout responsive */
+    margin-bottom: 2rem;
+}
+
+/* Media Queries per schermi più piccoli */
+@media (max-width: 768px) {
+    .card {
+        flex: 1 1 calc(50% - 1rem); /* 2 card per riga su schermi medi */
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        flex: 1 1 100%; /* 1 card per riga su schermi piccoli */
+    }
 }
 </style>
