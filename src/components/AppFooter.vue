@@ -1,10 +1,7 @@
 <script>
-
 export default {
     name: "AppFooter",
-    components: {
-
-    },
+    components: {},
 }
 </script>
 
@@ -18,22 +15,33 @@ export default {
             <div class="row">
                 <div class="col-12 bg-dark">
 
-                    <div class="text-white d-flex flex-row justify-content-around">
-                        <div class="d-flex flex-column p-2">
-                            <span>DELIVEBOO</span>
-                            <router-link to="/about">Chi siamo</router-link>
-                            <router-link to="/home">Ristoranti</router-link>
+                    <div class="text-white d-flex flex-column flex-md-row justify-content-around p-4">
+                        <div class="d-flex flex-column p-2 text-center">
+                            <span>MYMANGA</span>
+                            <hr>
+                            <div class="img-container">
+                                <img src="../assets/img/kana_logo.jpeg" alt="">
+                            </div>
                         </div>
 
-                        <div class="d-flex flex-column p-2">
+                        <div class="d-flex flex-column p-2 text-center">
+                            <span>PRODOTTI</span>
+                            <hr>
+                            <router-link to="/about">Chi siamo</router-link>
+                            <router-link to="/manga">Manga</router-link>
+                        </div>
+
+                        <div class="d-flex flex-column p-2 text-center">
                             <span>NOTE LEGALI</span>
+                            <hr>
                             <router-link to="/terms">Termini e condizioni</router-link>
-                            <router-link to="/privacy">informativa sulla privacy</router-link>
+                            <router-link to="/privacy">Informativa sulla privacy</router-link>
                             <router-link to="/cookies">Cookies</router-link>
                         </div>
 
-                        <div class="d-flex flex-column p-2">
+                        <div class="d-flex flex-column p-2 text-center">
                             <span>HELP</span>
+                            <hr>
                             <router-link to="/FAQ">FAQ</router-link>
                             <router-link to="/contact">Contact</router-link>
                         </div>
@@ -46,8 +54,6 @@ export default {
 </template>
 
 <style scoped>
-footer {}
-
 a {
     color: white;
     text-decoration: none;
@@ -58,9 +64,25 @@ a:hover {
     opacity: 0.5;
 }
 
-i {
-    color: white;
-    font-size: 2rem;
-    padding: 1rem;
+.img-container {
+    width: 100%; /* Cambiato da 10rem a 100% per essere responsivo */
+    max-width: 10rem; /* Imposta una larghezza massima */
+}
+
+.img-container img {
+    width: 100%;
+    border-radius: 10rem;
+}
+
+/* Media Queries per schermi più piccoli */
+@media (max-width: 768px) {
+    .text-white {
+        flex-direction: column; /* Modifica la direzione su schermi piccoli */
+        align-items: center; /* Centra gli elementi */
+    }
+
+    .img-container {
+        margin-bottom: 1rem; /* Spazio tra l'immagine e il testo */
+    }
 }
 </style>
