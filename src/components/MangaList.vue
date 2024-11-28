@@ -136,12 +136,11 @@ export default {
 <template>
     <div v-if="mangas.length > 0">
         <div class="container" style="background-color: rgb(250, 0, 83);">
-            <hr>
             <div class="row mt-5">
                 <div class="col-12">
                     <div class="search-filters d-flex justify-content-center">
                         <input type="text" v-model="filterQuery" placeholder="Cerca per titolo..."
-                            @input="applyFilters" />
+                        @input="applyFilters" />
                         <select v-model="selectedAuthor" @change="applyFilters">
                             <option value="">Seleziona Autore</option>
                             <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}</option>
@@ -150,15 +149,17 @@ export default {
                             <option value="">Seleziona Genere</option>
                             <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
                         </select>
-                        <select v-model="selectedCategory" @change="applyFilters">
-                            <option value="">Seleziona Categoria</option>
-                            <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-                        </select>
                         <select v-model="selectedEditors" @change="applyFilters">
                             <option value="">Seleziona Editore</option>
                             <option v-for="editor in editors" :key="editor.id" :value="editor.id">{{ editor.name }}</option>
                         </select>
+                        <!-- inutile -->
+                        <!-- <select v-model="selectedCategory" @change="applyFilters">
+                            <option value="">Seleziona Categoria</option>
+                            <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                        </select> -->
                     </div>
+                    <hr>
                     <div class="card-container d-flex justify-content-center align-items-center">
                         <div v-if="paginatedMangas.length === 0" class="">
                             <div class="empty-card-container position-relative d-flex justify-content-center align-items-center">
