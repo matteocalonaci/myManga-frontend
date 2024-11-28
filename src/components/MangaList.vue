@@ -111,12 +111,20 @@ applyFilters() {
 
     this.filteredMangas = this.mangas.filter(manga => {
         const matchesQuery = manga.title.toLowerCase().includes(this.filterQuery.trim().toLowerCase());
-        const matchesAuthor = this.selectedAuthor ? manga.author_id.toString() === this.selectedAuthor.toString() : true;
-        const matchesGenre = this.selectedGenre ? manga.genre_id && manga.genre_id.includes(this.selectedGenre.toString()) : true;   
-        const matchesCategory = this.selectedCategory ? manga.category_id.toString() === this.selectedCategory.toString() : true;     
-        const matchesEditors = this.selectedEditors ? manga.editor_id.toString() === this.selectedEditors.toString() : true;
+        const matchesAuthor = this.selectedAuthor ? manga.author_id && manga.author_id.toString() === this.selectedAuthor.toString() : true;
 
-        return matchesQuery && matchesAuthor && matchesGenre && matchesCategory && matchesEditors;
+        // Update the genre matching logic
+        const matchesGenre = this.selectedGenre ? 
+            manga.genres.some(genre => genre.id.toString() === this.selectedGenre.toString()) : true;
+
+        const matchesEditors = this.selectedEditors ? manga.editor_id && manga.editor_id.toString() === this.selectedEditors.toString() : true;
+
+        const isMatch = matchesQuery && matchesAuthor && matchesGenre && matchesEditors;
+        if (!isMatch) {
+            console.log(`Manga non corrisponde: ${manga.title}`);
+        }
+
+        return isMatch;
     });
 
     console.log("Manga filtrati:", this.filteredMangas);
@@ -129,6 +137,8 @@ applyFilters() {
         currentWishList() {
             return this.wishList;
         }
+
+        
     }
 }
 

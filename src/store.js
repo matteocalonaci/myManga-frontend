@@ -110,5 +110,9 @@ export const store = reactive({
       item.quantity--;
       this.updateLocalStorage(); // Aggiorna il local storage }
   }
+
+  
 },
+
+
 })
