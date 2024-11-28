@@ -126,8 +126,7 @@ export default {
 
 <style scoped>
 .carousel-item img {
-    height: 400px;
-    max-height: 13rem;
+    max-height: 25rem;
     width: 100%;
     /* Imposta l'altezza desiderata per le immagini */
 }

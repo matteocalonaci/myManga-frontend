@@ -32,35 +32,34 @@ export default {
         }
     },
     mounted() {
-        this.getMangas(); // Questo ora include anche i filtri
+        this.getMangas(); // Carica i manga iniziali
         this.getWishList();
     },
     methods: {
-        getMangas(page = 1, perPage = 12) {
-    this.loading = true;
-    const url = `${this.base_url}api/mangas?page=${page}&per_page=${perPage}`;
-    axios.get(url)
-        .then(response => {
-            console.log("Risposta API:", response.data);
-            this.mangas = response.data.mangas.data; // I dati della pagina corrente
-            this.totalPages = response.data.mangas.last_page; // Ultima pagina
-            this.currentPage = response.data.mangas.current_page; // Pagina corrente
-            
-            // Recupera anche autori, generi, categorie ed editori
-            this.authors = response.data.authors;
-            this.genres = response.data.genres;
-            this.categories = response.data.categories;
-            this.editors = response.data.editors;
-
-            this.applyFilters(); // Applica i filtri dopo aver caricato i dati
-        })
-        .catch(error => {
-            console.error("Si è verificato un errore durante il recupero dei manga:", error);
-        })
-        .finally(() => {
-            this.loading = false;
-        });
-},
+        getMangas() {
+            this.loading = true;
+            const url = `${this.base_url}api/mangas`;
+            axios.get(url, {
+                params: {
+                    per_page: 100 // Carica un numero maggiore di manga per il filtraggio
+                }
+            })
+            .then(response => {
+                this.mangas = response.data.mangas.data;
+                this.filteredMangas = this.mangas; // Inizialmente, i manga filtrati sono tutti
+                this.totalPages = Math.ceil(this.filteredMangas.length / 12); // Calcola il numero totale di pagine
+                this.authors = response.data.authors || [];
+                this.genres = response.data.genres || [];
+                this.editors = response.data.editors || [];
+                this.categories = response.data.categories || [];
+            })
+            .catch(error => {
+                console.error("Si è verificato un errore durante il recupero dei manga:", error);
+            })
+            .finally(() => {
+                this.loading = false;
+            });
+        },
 
         getWishList() {
             const storedWishList = localStorage.getItem("wishList");
@@ -88,62 +87,52 @@ export default {
             }
             localStorage.setItem("wishList", JSON.stringify(store.wishList));
         },
+
+        changePage(page) {
+            if (page >= 1 && page <= this.totalPages) {
+                this.currentPage = page;
+            }
+        },
+
         prevPage() {
-    if (this.currentPage > 1) {
-        this.currentPage--;
-        this.getMangas(this.currentPage); // Passa la pagina corrente
-    }
-},
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
 
-nextPage() {
-    if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-        this.getMangas(this.currentPage); // Passa la pagina corrente
-    }
-},
-applyFilters() {
-    console.log("Dati manga originali:", this.mangas);
-    console.log("Filtro query:", this.filterQuery);
-    console.log("Autore selezionato:", this.selectedAuthor);
-    console.log("Genere selezionato:", this.selectedGenre);
-    console.log("Categoria selezionato:", this.selectedCategory);
-    console.log("Editore selezionato:", this.selectedEditors);
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
 
-    this.filteredMangas = this.mangas.filter(manga => {
-        const matchesQuery = manga.title.toLowerCase().includes(this.filterQuery.trim().toLowerCase());
-        const matchesAuthor = this.selectedAuthor ? manga.author_id && manga.author_id.toString() === this.selectedAuthor.toString() : true;
+        applyFilters() {
+            // Applica i filtri sui manga caricati
+            this.filteredMangas = this.mangas.filter(manga => {
+                const matchesAuthor = this.selectedAuthor ? manga.author_id === this.selectedAuthor : true;
+                const matchesGenre = this.selectedGenre ? manga.genres.some(genre => genre.id === this.selectedGenre) : true;
+                const matchesCategory = this.selectedCategory ? manga.category_id === this.selectedCategory : true;
+                const matchesEditor = this.selectedEditors ? manga.editor_id === this.selectedEditors : true;
+                const matchesSearch = this.filterQuery ? manga.title.toLowerCase().includes(this.filterQuery.toLowerCase()) : true;
 
-        // Update the genre matching logic
-        const matchesGenre = this.selectedGenre ? 
-            manga.genres.some(genre => genre.id.toString() === this.selectedGenre.toString()) : true;
+                return matchesAuthor && matchesGenre && matchesCategory && matchesEditor && matchesSearch;
+            });
 
-        const matchesEditors = this.selectedEditors ? manga.editor_id && manga.editor_id.toString() === this.selectedEditors.toString() : true;
-
-        const isMatch = matchesQuery && matchesAuthor && matchesGenre && matchesEditors;
-        if (!isMatch) {
-            console.log(`Manga non corrisponde: ${manga.title}`);
+            this.totalPages = Math.ceil(this.filteredMangas.length / 12); // Ricalcola il numero totale di pagine
+            this.currentPage = 1; // Resetta alla prima pagina dopo l'applicazione dei filtri
         }
-
-        return isMatch;
-    });
-
-    console.log("Manga filtrati:", this.filteredMangas);
-
-    this.totalPages = Math.ceil(this.filteredMangas.length / 12);
-    this.currentPage = 1; // Resetta la pagina corrente se i risultati cambiano
-}
     },
     computed: {
         currentWishList() {
             return this.wishList;
+        },
+        paginatedMangas() {
+            const start = (this.currentPage - 1) * 12;
+            return this.filteredMangas.slice(start, start + 12); // Restituisce solo i manga per la pagina corrente
         }
-
-        
     }
 }
-
 </script>
-
 <template>
     <div v-if="mangas.length > 0">
         <div class="container" style="background-color: rgb(250, 0, 83);">
@@ -155,8 +144,7 @@ applyFilters() {
                             @input="applyFilters" />
                         <select v-model="selectedAuthor" @change="applyFilters">
                             <option value="">Seleziona Autore</option>
-                            <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}
-                            </option>
+                            <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}</option>
                         </select>
                         <select v-model="selectedGenre" @change="applyFilters">
                             <option value="">Seleziona Genere</option>
@@ -164,38 +152,36 @@ applyFilters() {
                         </select>
                         <select v-model="selectedCategory" @change="applyFilters">
                             <option value="">Seleziona Categoria</option>
-                            <option v-for="category in categories" :key="category.id" :value="category.id">{{
-                                category.name }}</option>
+                            <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
                         </select>
                         <select v-model="selectedEditors" @change="applyFilters">
                             <option value="">Seleziona Editore</option>
-                            <option v-for="editor in editors" :key="editor.id" :value="editor.id">{{ editor.name }}
-                            </option>
+                            <option v-for="editor in editors" :key="editor.id" :value="editor.id">{{ editor.name }}</option>
                         </select>
                     </div>
                     <div class="card-container d-flex justify-content-center align-items-center">
-                        <div v-if="filteredMangas.length === 0" class="">
-                            <div
-                                class="empty-card-container position-relative d-flex justify-content-center align-items-center">
+                        <div v-if="paginatedMangas.length === 0" class="">
+                            <div class="empty-card-container position-relative d-flex justify-content-center align-items-center">
                                 <img src="../assets/img/sad-kana.webp" alt="sad-kana" style="width: 40rem;">
                                 <p class="text position-absolute bottom-0"><b>NESSUN RISULTATO TROVATO</b></p>
                             </div>
                         </div>
-
-                        <div v-for="manga in filteredMangas.slice((currentPage - 1) * 12, currentPage * 12)" :key="manga.id" class="card-wrapper">
-    <Single_Manga :manga="manga" :wishList="wishList" @add-to-wishlist="toggleWishList" @remove-from-wishlist="toggleWishList" />
-</div>
+                        <div v-for="manga in paginatedMangas" :key="manga.id" class="card-wrapper">
+                            <Single_Manga :manga="manga" :wishList="wishList" @add-to-wishlist="toggleWishList"
+                                @remove-from-wishlist="toggleWishList" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="pagination">
             <div class="controller-buttons">
-                <button @click="prevPage" :disabled="currentPage === 1"> <i class="fa-solid fa-angle-left"></i>
-                    Precedente</button>
-                <span> Pagina {{ currentPage }} di {{ totalPages }}</span>
-                <button @click="nextPage" :disabled="currentPage === totalPages">Successivo <i
-                        class="fa-solid fa-angle-right"></i></button>
+                <button v-for="page in totalPages" 
+                        :key="page" 
+                        @click="changePage(page)" 
+                        :class="{ active: currentPage === page }">
+                    {{ page }}
+                </button>
             </div>
         </div>
         <LoadingScreen v-if="loading" />
@@ -246,7 +232,7 @@ applyFilters() {
     background-color: white;
 }
 
-.controller-buttons button:hover {
+.controller .buttons button:hover {
     color: rgb(250, 0, 83);
 }
 
