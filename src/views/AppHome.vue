@@ -1,11 +1,13 @@
 <script>
 import AppFooter from '../components/AppFooter.vue';
 import MangaList from '../components/MangaList.vue';
+import Cart from '../components/Cart.vue';
 
 export default {
     components: {
         MangaList,
-        AppFooter
+        AppFooter,
+        Cart 
     },
     data() {
         return {
@@ -30,11 +32,22 @@ export default {
                 }
             ]
         };
+    },
+    methods: {
+      openCart() {
+        const offcanvasElement = document.getElementById('cartOffcanvas');
+        const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+        offcanvas.show();
+      }
     }
+
 };
 </script>
 
 <template>
+      <div>
+      <AppHeader @open-cart="openCart" />
+      
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item pt-5" v-for="(image, index) in images" :key="index" :class="{ active: index === 0 }">
@@ -120,7 +133,12 @@ export default {
 
     </div>
 
+     <!-- Offcanvas per il carrello -->
+     <Cart /> <!-- Assicurati che il componente Cart sia incluso qui -->
+
+
     <AppFooter />
+</div>
 </template>
 
 
