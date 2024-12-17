@@ -212,10 +212,10 @@ export default {
         if (data.status === 'success') {
           // Svuota il carrello
           this.cartItems = [];
-          store.commit('clearCart'); // Se stai usando Vuex per gestire il carrello
+          store.clearCart(); // Chiamata diretta al metodo clearCart
 
           // Reindirizza alla pagina di conferma
-          this.$router.push({ name: 'thanks' }); // Assicurati di avere una route chiamata 'orderConfirmation'
+          this.$router.push({ name: 'thanks' }); // Assicurati di avere una route chiamata 'thanks'
 
           // Opzionale: reindirizza alla home dopo 5 secondi
           setTimeout(() => {

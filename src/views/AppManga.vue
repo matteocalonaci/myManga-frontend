@@ -3,11 +3,13 @@
 
 import axios from 'axios';
 import MangaList from '../components/MangaList.vue';
+import AppFooter from '../components/AppFooter.vue';
 
 export default {
   name: "AppManga",
   components: {
     MangaList,
+    AppFooter
   },
   data() {
     return {
@@ -26,6 +28,8 @@ export default {
   <div>
 
     <MangaList />
+    <AppFooter />
+
 
   </div>
 </template>

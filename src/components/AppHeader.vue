@@ -48,7 +48,7 @@
         <div class="navbar-nav">
           <div class="menu-mobile d-flex justify-content-between">
             <div>
-              <router-link to="/" @click="notify('Sei tornato alla Home!')">
+              <router-link to="/home" @click="notify('Sei tornato alla Home!')">
                 <i class="fa-solid fa-cart-shopping"></i> Home
               </router-link>
 

@@ -2,6 +2,7 @@
         import axios from 'axios';
         import LoadingScreen from '../components/LoadingScreen.vue';
         import Cart from '../components/Cart.vue'; 
+        import AppFooter from '../components/AppFooter.vue';
         import { store } from '../store'; 
         
         export default {
@@ -9,6 +10,7 @@
             components: {
                 LoadingScreen,
                 Cart,
+                AppFooter
             },
             data() {
                 return {
@@ -76,7 +78,7 @@
     <div v-else-if="manga">
         <div class="container p-5">
             <div class="row">
-                <div class="col-12 col-md-4 mb-4">
+                <div class="col-12 col-md-5 mb-4">
                     <div class="img-container">
                         <img :src="manga.cover_image" class="card-img-top img-fluid" alt=""
                             style="object-fit: cover; border-radius: 1rem;">
@@ -84,7 +86,7 @@
                             @click.stop="toggleLike" :style="iconStyle" style="cursor: pointer;"></i>
                     </div>
                 </div>
-                <div class="col-12 col-md-8">
+                <div class="col-12 col-md-7">
                     <div class="card-body">
                         <h2 class="card-title"><b>{{ manga.title }}</b></h2>
                         <h5 class="card-text mt-3 mb-4"><b>€{{ manga.price }}</b></h5>
@@ -121,6 +123,8 @@
     <div v-else>
         <p>Manga non trovato.</p>
     </div>
+    <AppFooter />
+
 </template>
 
 
@@ -143,7 +147,7 @@
 
 .card-body {
     background-color: white;
-    padding: 1rem;
+    padding: 0.7rem;
     border-radius: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.377);
 }

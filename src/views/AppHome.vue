@@ -4,6 +4,7 @@ import MangaList from '../components/MangaList.vue';
 import Cart from '../components/Cart.vue';
 
 export default {
+    name: 'AppHome',
     components: {
         MangaList,
         AppFooter,
@@ -135,6 +136,7 @@ export default {
 
      <!-- Offcanvas per il carrello -->
      <Cart /> <!-- Assicurati che il componente Cart sia incluso qui -->
+     <AppFooter />
 
 </div>
 </template>
