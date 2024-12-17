@@ -45,7 +45,9 @@
 
         <hr>
         <div class="checkout-container-button d-flex justify-content-center">
-          <button class="checkout-button">Procedi con il checkout</button>
+          <router-link to="checkout">
+            <button class="checkout-button">Procedi con il checkout</button>
+          </router-link>
         </div>
       </div>
     </div>

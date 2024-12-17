@@ -12,6 +12,8 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",
+    "braintree-web": "^3.112.1",
+    "braintree-web-drop-in": "^1.43.0",
     "mitt": "^3.0.1",
     "sweetalert2": "^11.6.13",
     "vue": "^3.5.12",
