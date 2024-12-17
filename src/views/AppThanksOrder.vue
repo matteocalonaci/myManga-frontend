@@ -11,7 +11,12 @@ export default {
 
         }
 
-    }
+    }, 
+    mounted() {
+    setTimeout(() => {
+      this.$router.push({ name: 'home' });
+    }, 5000); // Reindirizza alla home dopo 5 secondi
+  }
 }
 
 </script>
@@ -23,6 +28,9 @@ export default {
             <div class="spinner"></div>
         </div>
         <h1 id="order-message" style="display: none;">Ordine Effettuato!</h1>
+        <p>Grazie per il tuo acquisto. Riceverai un'email di conferma a breve.</p>
+    <p>Verrai reindirizzato alla home page tra 5 secondi...</p>
+    <img src="../assets/img/kana-payment-ok.gif" alt="">
     </div>
 
 

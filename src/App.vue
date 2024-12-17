@@ -5,17 +5,22 @@
       <div class="general-container">
         <router-view />
       </div>
+      <AppFooter />
+
     </body>
   </div>
 </template>
 
 <script>
 import AppHeader from './components/AppHeader.vue';
+import AppFooter from './components/AppFooter.vue';
 
 export default {
   name: 'App',
   components: {
     AppHeader,
+    AppFooter
+
   }
 };
 </script>
@@ -24,7 +29,7 @@ export default {
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%; /* Imposta l'altezza al 100% */
+  min-height: 100%; /* Imposta l'altezza al 100% */
   font-family: 'Arial', sans-serif;
   background-color: rgb(250, 0, 83); /* Colore di sfondo per il contenuto */
   overflow: auto; /* Aggiungi overflow auto per gestire il contenuto in eccesso */
@@ -39,7 +44,11 @@ html, body {
 
 .general-container {
   flex: 1; /* Permette al contenitore di espandersi */
-  margin-top: 10rem;
+  margin-top: 8rem;
+  height: 100%; /* Imposta l'altezza al 100% */
+  background-color: rgb(250, 0, 83); /* Colore di sfondo per il contenuto */
+  padding: 2rem;
+
 }
 
 .router-view {

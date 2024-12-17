@@ -173,58 +173,67 @@ export default {
         });
     },
     submitOrder() {
-      this.dropinInstance.requestPaymentMethod().then(payload => {
-        const orderDetails = {
-          user: {
-            name: this.user.name,
-            surname: this.user.surname,
-            email: this.user.email,
-            phone: this.user.phone
-          },
-          shipping: {
-            address: this.shipping.address,
-            city: this.shipping.city,
-            state: this.shipping.state,
-            postalCode: this.shipping.postalCode,
-          },
-          shippingMethod: this.shippingMethodSelected,
-          paymentMethodNonce: payload.nonce,
-          amount: this.cartTotal,
-          products: this.cartItems.map(item => ({
-            id: item.id,
-            title: item.title,
-            price: parseFloat(item.price).toFixed(2),
-            quantity: item.quantity
-          }))
-        };
+  this.dropinInstance.requestPaymentMethod().then(payload => {
+    const orderDetails = {
+      user: {
+        name: this.user.name,
+        surname: this.user.surname,
+        email: this.user.email,
+        phone: this.user.phone
+      },
+      shipping: {
+        address: this.shipping.address,
+        city: this.shipping.city,
+        state: this.shipping.state,
+        postalCode: this.shipping.postalCode,
+      },
+      shippingMethod: this.shippingMethodSelected,
+      paymentMethodNonce: payload.nonce,
+      amount: this.cartTotal,
+      products: this.cartItems.map(item => ({
+        id: item.id,
+        title: item.title,
+        price: parseFloat(item.price).toFixed(2),
+        quantity: item.quantity
+      }))
+    };
 
-        // Invia l'ordine al server
-        fetch('http://localhost:8000/api/braintree/checkout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderDetails),
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data); // Mostra la risposta del server nella console
-            if (data.status === 'success') {
-              alert('Ordine completato con successo!');
-              // ... il resto del codice
-            } else {
-              alert('Errore nel completamento dell\'ordine: ' + data.message);
-            }
-          })
-          .catch(err => {
-            console.error('Errore nella richiesta:', err);
-            alert('Si è verificato un errore durante il completamento dell\'ordine.');
-          });
-      }).catch(err => {
-        console.error('Errore nella richiesta di pagamento:', err);
-        alert('Errore nella richiesta di pagamento.');
+    // Invia l'ordine al server
+    fetch('http://localhost:8000/api/braintree/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderDetails),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data); // Mostra la risposta del server nella console
+        if (data.status === 'success') {
+          // Svuota il carrello
+          this.cartItems = [];
+          store.commit('clearCart'); // Se stai usando Vuex per gestire il carrello
+
+          // Reindirizza alla pagina di conferma
+          this.$router.push({ name: 'thanks' }); // Assicurati di avere una route chiamata 'orderConfirmation'
+
+          // Opzionale: reindirizza alla home dopo 5 secondi
+          setTimeout(() => {
+            this.$router.push({ name: 'home' }); // Assicurati di avere una route chiamata 'home'
+          }, 5000);
+        } else {
+          alert('Errore nel completamento dell\'ordine: ' + data.message);
+        }
+      })
+      .catch(err => {
+        console.error('Errore nella richiesta:', err);
+        alert('Si è verificato un errore durante il completamento dell\'ordine.');
       });
-    }
+  }).catch(err => {
+    console.error('Errore nella richiesta di pagamento:', err);
+    alert('Errore nella richiesta di pagamento.');
+  });
+}
   }
 }
 </script>
