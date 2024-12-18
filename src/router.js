@@ -4,7 +4,7 @@ import AppContact from "./views/AppContact.vue";
 import AppAbout from "./views/AppAbout.vue";
 import MangaShow from "./views/MangaShow.vue";
 import AppTerms from "./views/AppTerms.vue";
-import AppCookies from"./views/AppCookies.vue";
+import AppCookies from "./views/AppCookies.vue";
 import AppPrivacy from "./views/AppPrivacy.vue";
 import AppFaq from "./views/AppFAQ.vue";
 import Cart from "./components/Cart.vue";
@@ -13,12 +13,11 @@ import AppThanksOrder from './Views/AppThanksOrder.vue';
 import WishList from "./views/WishList.vue";
 import Not_found from "./views/Not_found.vue";
 import AppManga from "./views/AppManga.vue";
-
-
-
-
+import { ref } from 'vue'; // Importa ref per la variabile reattiva
 
 // Importa i tuoi componenti
+
+const loading = ref(false); // Crea una variabile reattiva per il caricamento
 
 const router = createRouter({
   history: createWebHistory(),
@@ -96,4 +95,16 @@ const router = createRouter({
   ],
 });
 
-export { router };
+// Aggiungi il middleware per il caricamento
+router.beforeEach((to, from, next) => {
+  loading.value = true; // Imposta loading a true
+  setTimeout(() => {
+    next(); // Continua la navigazione dopo il ritardo
+  }, 1000); // Ritardo di 1000 ms (1 secondo)
+});
+
+router.afterEach(() => {
+  loading.value = false; // Imposta loading a false
+});
+
+export { router, loading }; // Esporta anche la variabile loading

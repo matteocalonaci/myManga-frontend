@@ -1,40 +1,35 @@
-      <script>
-      import LoadingScreen from './LoadingScreen.vue';
-      import { store } from '../store';
-      
-      export default {
-        name: 'AppHeader',
-        components: { LoadingScreen },
-      
-        computed: {
-          wishList() {
-            return store.wishList;
-          },
-          wishListCount() {
-            return this.wishList.length;
-          },
-          cart(){
-            return store.cart;
-          },
-          cartCount(){
-            return this.cart.length;
-          }
-      
-        },
-        methods: {
-    openCart() {
-      const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-      offcanvas.show(); // Mostra l'offcanvas
-    }
-  }
-      }
-      </script>
+<script>
+import LoadingScreen from './LoadingScreen.vue';
+import { store } from '../store';
+import { useRouter } from 'vue-router'; 
+import { loading } from '../router'; // Importa la variabile loading dal router
+
+export default {
+  name: 'AppHeader',
+  components: { LoadingScreen },
+  setup() {
+    const router = useRouter();
+
+    return {
+      loading, // Usa la variabile reattiva dal router
+      wishList: store.wishList,
+      wishListCount: store.wishList.length,
+      cart: store.cart,
+      cartCount: store.cart.length,
+      openCart() {
+        const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+        offcanvas.show();
+      },
+    };
+  },
+};
+</script>
 
       
 <template>
   <nav class="navbar navbar-expand-sm">
-    <div class=" ship text-center bg-white">
-      <p style=" color:rgb(198, 23, 81) ;"><b>SPEDIZIONE GRATUITA DA €39</b></p>
+    <div class="ship text-center bg-white">
+      <p style="color: rgb(198, 23, 81);"><b>SPEDIZIONE GRATUITA DA €39</b></p>
     </div>
     <div class="container-fluid mt-3">
       <img class="logo" src="../assets/img/kana_logo.jpeg" alt="">
@@ -71,9 +66,8 @@
       </div>
     </div>
   </nav>
-  <LoadingScreen v-if="loading" />
+  <LoadingScreen v-if="loading" /> <!-- Mostra la schermata di caricamento -->
 </template>
-
 
 <style scoped>
 nav {
@@ -86,6 +80,7 @@ nav {
   z-index: 1000;
 }
 
+
 a {
   padding: 0 1rem;
   color: white;
@@ -94,6 +89,8 @@ a {
 
 a:hover {
   font-size: 1.2rem;
+  text-decoration: none;
+
 }
 
 .logo {
@@ -146,6 +143,12 @@ button {
 
 }
 
+.open-card:hover{
+  color: blue;
+  font-size: 1.2rem;
+  text-decoration: none;
+
+}
 .ship{
   position: absolute;
   top:0;
