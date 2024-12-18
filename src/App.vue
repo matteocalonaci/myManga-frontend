@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <AppHeader />
-    <div class="general-container">
+    <div class="general-container" ref="generalContainer">
       <router-view />
     </div>
   </div>
@@ -9,7 +9,7 @@
 
 <script>
 import { store } from './store'; 
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import AppHeader from './components/AppHeader.vue';
 
@@ -20,13 +20,16 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const generalContainer = ref(null);
 
-    // Resetta la visibilità del carrello quando si cambia pagina
     watch(() => router.currentRoute.value, () => {
-      store.isCartVisible = false; // Nascondi il carrello
+      store.isCartVisible = false;
+      if (generalContainer.value) {
+        generalContainer.value.scrollTop = 0;
+      }
     });
 
-    return {};
+    return { generalContainer };
   },
 };
 </script>
@@ -35,7 +38,7 @@ export default {
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%; /* Assicurati che l'altezza sia al 100% */
+  height: 100%;
   font-family: 'Arial', sans-serif;
   background-color: rgb(250, 0, 83); 
 }
@@ -50,28 +53,24 @@ html, body {
   flex: 1; 
   margin-top: 8rem; 
   background-color: rgb(250, 0, 83);
-  overflow-y: auto; /* Permette lo scrolling verticale */
-  -webkit-overflow-scrolling: auto; /* Abilita lo scrolling fluido su iOS */
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: auto; 
 }
 
 /* Personalizzazione della scrollbar per Webkit (Chrome, Safari) */
 .general-container::-webkit-scrollbar {
-  width: 12px; /* Larghezza della scrollbar */
+  width: 0.8rem; 
 }
 
 .general-container::-webkit-scrollbar-thumb {
-  background-color: rgb(250, 0, 83);
-  border-radius: 10px; /* Raggio degli angoli */
+  background-color: rgb(176, 0, 59);
+  border-radius: 10px; 
 }
 
 .general-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1); /* Colore del track */
-  border-radius: 10px; /* Raggio degli angoli */
+  background: rgba(0, 0, 0, 0.1); 
+  border-radius: 1rem; 
 }
 
-/* Personalizzazione della scrollbar per Firefox */
-.general-container {
-  scrollbar-width: thin; /* Può essere 'auto', 'thin' o 'none' */
-  scrollbar-color: rgba(241, 233, 237, 0.858)  rgb(250, 0, 83);/* Colore del thumb e del track */
-}
+
 </style>

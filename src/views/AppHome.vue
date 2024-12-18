@@ -136,6 +136,8 @@ export default {
 
      <!-- Offcanvas per il carrello -->
      <Cart /> <!-- Assicurati che il componente Cart sia incluso qui -->
+     <AppFooter />
+
 
 </div>
 </template>

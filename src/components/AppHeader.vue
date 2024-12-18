@@ -7,7 +7,7 @@
       <img class="logo" src="../assets/img/kana_logo.jpeg" alt="">
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" @click="toggleMenu">
         <i class="fa-solid fa-bars"></i>
       </button>
 
@@ -15,15 +15,15 @@
         <div class="navbar-nav">
           <div class="menu-mobile d-flex justify-content-between">
             <div>
-              <router-link to="/home" @click="notify('Sei tornato alla Home!')">
+              <router-link to="/home" @click="navigateTo('home')">
                 <i class="fa-solid fa-cart-shopping"></i> Home
               </router-link>
 
-              <router-link to="/manga">
+              <router-link to="/manga" @click="navigateTo('manga')">
                 <i class="fa-solid fa-book-open"></i> Manga
               </router-link>
 
-              <router-link to="/wish-list">
+              <router-link to="/wish-list" @click="navigateTo('wish-list')">
                 <i class="fa-regular fa-heart"></i>
                 Lista desideri (<span class="wishlist-count">{{ wishList.length }}</span>)
               </router-link>
@@ -57,11 +57,22 @@ export default {
     const wishList = computed(() => store.wishList);
     const cart = computed(() => store.cart);
 
+    const navigateTo = (route) => {
+      // Chiudi il menu
+      const navbarCollapse = document.getElementById('navbarNavAltMarkup');
+      if (navbarCollapse) {
+        navbarCollapse.classList.remove('show');
+      }
+      // Naviga alla rotta
+      router.push({ name: route });
+    };
+
     return {
       loading, 
       wishList,
       cart,
       store, // Aggiungi store per accedere al metodo openCart
+      navigateTo,
     };
   },
 };
@@ -118,18 +129,17 @@ img {
   border-radius: 50%;
   padding: 0 5px;
   margin-left: 5px;
-  font-size: 14px;
 }
 
 .menu-mobile {
-  background-color: rgb(250, 0, 83);
+  background-color:  rgb(250, 0, 83);
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 button {
-  color : #fbe8ea6b;
+  color: #fbe8ea6b;
   border-color: #ffffff;
 }
 

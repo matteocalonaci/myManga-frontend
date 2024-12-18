@@ -13,11 +13,9 @@ import AppThanksOrder from './Views/AppThanksOrder.vue';
 import WishList from "./views/WishList.vue";
 import Not_found from "./views/Not_found.vue";
 import AppManga from "./views/AppManga.vue";
-import { ref } from 'vue'; // Importa ref per la variabile reattiva
+import { ref } from 'vue';
 
-// Importa i tuoi componenti
-
-const loading = ref(false); // Crea una variabile reattiva per il caricamento
+const loading = ref(false);
 
 const router = createRouter({
   history: createWebHistory(),
@@ -43,7 +41,7 @@ const router = createRouter({
       component: AppManga,
     },
     {
-      path: "/manga/:slug", //add slug
+      path: "/manga/:slug",
       name: "MangaShow",
       component: MangaShow,
     },
@@ -102,18 +100,15 @@ const router = createRouter({
   }
 });
 
-
-
-// Aggiungi il middleware per il caricamento
 router.beforeEach((to, from, next) => {
-  loading.value = true; // Imposta loading a true
+  loading.value = true;
   setTimeout(() => {
-    next(); // Continua la navigazione dopo il ritardo
-  }, 1000); // Ritardo di 1000 ms (1 secondo)
+    next();
+  }, 1000);
 });
 
 router.afterEach(() => {
-  loading.value = false; // Imposta loading a false
+  loading.value = false;
 });
 
-export { router, loading }; // Esporta anche la variabile loading
+export { router, loading };
