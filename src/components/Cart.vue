@@ -144,9 +144,13 @@ export default {
 <style scoped>
 .offcanvas-body {
   max-height: 100vh; 
-  overflow-y: auto;
+  overflow-y: scroll; /* Permette lo scrolling */
   color: white;
   background-color: rgb(198, 23, 81);
+}
+
+.offcanvas-body::-webkit-scrollbar {
+  display: none; /* Nasconde la scrollbar */
 }
 .offcanvas-end {
   background-color: rgb(198, 23, 81);

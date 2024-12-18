@@ -50,7 +50,7 @@ export default {
                 </div>
             </div>
             <div class="row d-flex justify-content-between align-items-center" style="height: 3.5rem;">
-                <div class="col-6 text-white"><b>©2024 myManga s.r.l. P.IVA: xxxxxxxxxxx</b></div>
+                <div class="col-6" style="color: rgba(0, 0, 0, 0.6);"><b>©2024 myManga s.r.l. P.IVA: xxxxxxxxxxx</b></div>
                 
                     <div class="col-6 text-end"><img src="https://pngimg.com/d/mastercard_PNG27.png" alt="" style="height: 2rem;"></div>
                 
