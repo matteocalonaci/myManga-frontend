@@ -1,31 +1,3 @@
-<script>
-import LoadingScreen from './LoadingScreen.vue';
-import { store } from '../store';
-import { useRouter } from 'vue-router'; 
-import { loading } from '../router'; // Importa la variabile loading dal router
-
-export default {
-  name: 'AppHeader',
-  components: { LoadingScreen },
-  setup() {
-    const router = useRouter();
-
-    return {
-      loading, // Usa la variabile reattiva dal router
-      wishList: store.wishList,
-      wishListCount: store.wishList.length,
-      cart: store.cart,
-      cartCount: store.cart.length,
-      openCart() {
-        const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-        offcanvas.show();
-      },
-    };
-  },
-};
-</script>
-
-      
 <template>
   <nav class="navbar navbar-expand-sm">
     <div class="ship text-center bg-white">
@@ -53,12 +25,12 @@ export default {
 
               <router-link to="/wish-list">
                 <i class="fa-regular fa-heart"></i>
-                Lista desideri (<span class="wishlist-count">{{ wishListCount }}</span>)
+                Lista desideri (<span class="wishlist-count">{{ wishList.length }}</span>)
               </router-link>
 
               <span @click="openCart" class="open-card">
                 <i class="fa-solid fa-cart-shopping"></i> 
-                Carrello (<span class="cart-count">{{ cartCount }}</span>)
+                Carrello (<span class="cart-count">{{ cart.length }}</span>)
               </span>
             </div>
           </div>
@@ -68,6 +40,37 @@ export default {
   </nav>
   <LoadingScreen v-if="loading" /> <!-- Mostra la schermata di caricamento -->
 </template>
+
+<script>
+import LoadingScreen from './LoadingScreen.vue';
+import { store } from '../store';
+import { useRouter } from 'vue-router'; 
+import { loading } from '../router'; // Importa la variabile loading dal router
+import { computed } from 'vue';
+
+export default {
+  name: 'AppHeader',
+  components: { LoadingScreen },
+  setup() {
+    const router = useRouter();
+
+    // Utilizza computed per ottenere il conteggio reattivo
+    const wishList = computed(() => store.wishList);
+    const cart = computed(() => store.cart);
+
+    return {
+      loading, // Usa la variabile reattiva dal router
+      wishList,
+      cart,
+      openCart() {
+        const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+        offcanvas.show();
+      },
+    };
+  },
+};
+</script>
+
 
 <style scoped>
 nav {

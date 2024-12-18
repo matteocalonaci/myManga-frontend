@@ -7,6 +7,7 @@ const initialCart = JSON.parse(localStorage.getItem("cart")) || []; // Inizializ
 export const store = reactive({
   wishList: initialWishList,
   cart: initialCart,
+  isCartVisible: false, // Nuovo stato per la visibilità del carrello
 
   addToWishList(item) {
     const exists = this.wishList.some(existingItem => existingItem.id === item.id);
@@ -64,6 +65,7 @@ export const store = reactive({
     } else {
       console.log(`${manga.title} è già nel carrello.`);
     }
+    this.isCartVisible = true; // Mostra il carrello quando un prodotto viene aggiunto
   },
 
   removeFromCart(manga) {
@@ -75,7 +77,7 @@ export const store = reactive({
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sì, rimuovi!',
-      cancelButtonText: 'annulla',
+      cancelButtonText: 'Annulla',
     }).then((result) => {
       if (result.isConfirmed) {
         const index = this.cart.findIndex(existingManga => existingManga.id === manga.id);
@@ -108,11 +110,11 @@ export const store = reactive({
     const item = this.cart.find(item => item.id === manga.id);
     if (item && item.quantity > 1) {
       item.quantity--;
-      this.updateLocalStorage(); // Aggiorna il local storage }
+      this.updateLocalStorage(); // Aggiorna il local storage
+    }
+  },
+
+  toggleCartVisibility() {
+    this.isCartVisible = !this.isCartVisible; // Alterna la visibilità del carrello
   }
-
-  
-},
-
-
-})
+});
