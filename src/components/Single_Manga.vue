@@ -1,8 +1,7 @@
 <script>
 import axios from 'axios';
-import Swal from 'sweetalert2';
-import { store } from '../store'; // Assicurati che il percorso sia corretto
-import Cart from './Cart.vue'; // Assicurati che il percorso sia corretto
+import { store } from '../store'; 
+import Cart from './Cart.vue'; 
 
 export default {
   name: 'Single_Manga',
@@ -36,7 +35,7 @@ export default {
           console.error("Si è verificato un errore durante il recupero dei manga:", error);
         })
         .finally(() => {
-          this.loading = false; // Imposta loading a false anche in caso di errore
+          this.loading = false; 
         });
     },
 
@@ -50,11 +49,11 @@ export default {
     },
 
     addWishList() {
-      store.addToWishList(this.manga); // Usa il metodo del store
+      store.addToWishList(this.manga); // metodo in store.js
     },
 
     removeWishList() {
-      store.removeFromWishList(this.manga); // Usa il metodo del store
+      store.removeFromWishList(this.manga); // metodo in store.js
     },
 
     getWishList() {
@@ -62,7 +61,7 @@ export default {
     },
 
     addToCart(manga) {
-      store.addToCart(manga); // Usa il metodo del store
+      store.addToCart(manga); // metodo in store.js
     },
   },
 
@@ -83,7 +82,7 @@ export default {
       };
     },
     truncatedTitle() {
-      const maxLength = 30; // Imposta il numero massimo di caratteri
+      const maxLength = 30; // Imposto il numero max di caratteri
       return this.manga.title.length > maxLength ? this.manga.title.substring(0, maxLength) + '...' : this.manga.title;
     }
   }

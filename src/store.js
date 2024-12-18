@@ -7,7 +7,7 @@ const initialCart = JSON.parse(localStorage.getItem("cart")) || []; // Inizializ
 export const store = reactive({
   wishList: initialWishList,
   cart: initialCart,
-  isCartVisible: false, // Nuovo stato per la visibilità del carrello
+  isCartVisible: false, 
 
   addToWishList(item) {
     const exists = this.wishList.some(existingItem => existingItem.id === item.id);
@@ -56,16 +56,25 @@ export const store = reactive({
   },
 
   addToCart(manga) {
-    console.log('Aggiungendo al carrello:', manga); // Log per il debug
+    console.log('Aggiungendo al carrello:', manga); 
     const exists = this.cart.find(existingManga => existingManga.id === manga.id);
     if (!exists) {
-      this.cart.push({ ...manga, quantity: 1 }); // Inizializza quantity a 1
+      this.cart.push({ ...manga, quantity: 1 });
       this.updateLocalStorage();
-      console.log(`${manga.title} aggiunto al carrello.`);
+      console.log('Manga aggiunto al carrello:', manga);
     } else {
-      console.log(`${manga.title} è già nel carrello.`);
+      exists.quantity++;
+      this.updateLocalStorage();
+      console.log('Quantità aggiornata per:', exists);
     }
-    this.isCartVisible = true; // Mostra il carrello quando un prodotto viene aggiunto
+    this.isCartVisible = true; 
+    this.openCart(); // Chiama il metodo per aprire il carrello
+  },
+
+  openCart() {
+    this.isCartVisible = true; // Imposta la visibilità del carrello
+    const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+    cartOffcanvas.show(); // Mostra l'offcanvas
   },
 
   removeFromCart(manga) {
@@ -84,7 +93,7 @@ export const store = reactive({
         if (index !== -1) {
           this.cart.splice(index, 1);
           this.updateLocalStorage();
-          Swal.fire('Rimosso!', `${manga.title} è stato rimosso dal carrello.`, 'success');
+          Swal.fire('Rimosso!', `${manga.title} è stato rimosso dal carrello.`, ' success');
         } else {
           Swal.fire('Errore!', `${manga.title} non è nel carrello.`, 'error');
         }
@@ -112,9 +121,5 @@ export const store = reactive({
       item.quantity--;
       this.updateLocalStorage(); // Aggiorna il local storage
     }
-  },
-
-  toggleCartVisibility() {
-    this.isCartVisible = !this.isCartVisible; // Alterna la visibilità del carrello
   }
 });

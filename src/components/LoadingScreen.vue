@@ -19,8 +19,8 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    background-color: #fff; /* or any other background color you prefer */
-    z-index: 1000; /* make sure it's on top of everything */
+    background-color: #fff; 
+    z-index: 1000; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,9 +31,9 @@
   }
   
   .loading-logo {
-    width: 15rem; /* impostare la larghezza dell'immagine */
-    height: 12rem; /* impostare l'altezza dell'immagine */
-    animation: logo-animation 2s infinite; /* aggiungere l'animazione */
+    width: 15rem; 
+    height: 12rem; 
+    animation: logo-animation 2s infinite; 
     margin-bottom: 3rem;
   }
   
@@ -47,7 +47,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: #bb2d3b; /* or any other color you prefer */
+    background-color: #bb2d3b; 
     margin: 0 5px;
     animation: loading-dot 1.5s infinite;
   }

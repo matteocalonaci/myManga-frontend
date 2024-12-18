@@ -72,8 +72,8 @@ a:hover {
 }
 
 .img-container {
-    width: 100%; /* Cambiato da 10rem a 100% per essere responsivo */
-    max-width: 10rem; /* Imposta una larghezza massima */
+    width: 100%; 
+    max-width: 10rem;
 }
 
 .img-container img {
@@ -84,12 +84,12 @@ a:hover {
 /* Media Queries per schermi più piccoli */
 @media (max-width: 768px) {
     .text-white {
-        flex-direction: column; /* Modifica la direzione su schermi piccoli */
-        align-items: center; /* Centra gli elementi */
+        flex-direction: column; 
+        align-items: center; 
     }
 
     .img-container {
-        margin-bottom: 1rem; /* Spazio tra l'immagine e il testo */
+        margin-bottom: 1rem;
     }
 }
 </style>

@@ -28,7 +28,7 @@
                 Lista desideri (<span class="wishlist-count">{{ wishList.length }}</span>)
               </router-link>
 
-              <span @click="openCart" class="open-card">
+              <span @click="store.openCart" class="open-card"> <!-- Chiama il metodo openCart dallo store -->
                 <i class="fa-solid fa-cart-shopping"></i> 
                 Carrello (<span class="cart-count">{{ cart.length }}</span>)
               </span>
@@ -38,14 +38,14 @@
       </div>
     </div>
   </nav>
-  <LoadingScreen v-if="loading" /> <!-- Mostra la schermata di caricamento -->
+  <LoadingScreen v-if="loading" /> 
 </template>
 
 <script>
 import LoadingScreen from './LoadingScreen.vue';
 import { store } from '../store';
 import { useRouter } from 'vue-router'; 
-import { loading } from '../router'; // Importa la variabile loading dal router
+import { loading } from '../router'; 
 import { computed } from 'vue';
 
 export default {
@@ -54,23 +54,18 @@ export default {
   setup() {
     const router = useRouter();
 
-    // Utilizza computed per ottenere il conteggio reattivo
     const wishList = computed(() => store.wishList);
     const cart = computed(() => store.cart);
 
     return {
-      loading, // Usa la variabile reattiva dal router
+      loading, 
       wishList,
       cart,
-      openCart() {
-        const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-        offcanvas.show();
-      },
+      store, // Aggiungi store per accedere al metodo openCart
     };
   },
 };
 </script>
-
 
 <style scoped>
 nav {
@@ -83,7 +78,6 @@ nav {
   z-index: 1000;
 }
 
-
 a {
   padding: 0 1rem;
   color: white;
@@ -93,7 +87,6 @@ a {
 a:hover {
   font-size: 1.2rem;
   text-decoration: none;
-
 }
 
 .logo {
@@ -136,25 +129,24 @@ img {
 }
 
 button {
-  color: #bb2d3b;
+  color : #bb2d3b;
   border-color: #bb2d3b;
 }
 
-.open-card{
+.open-card {
   border: none;
   color: white;
-
 }
 
-.open-card:hover{
+.open-card:hover {
   color: blue;
   font-size: 1.2rem;
   text-decoration: none;
-
 }
-.ship{
+
+.ship {
   position: absolute;
-  top:0;
+  top: 0;
   width: 100%;
   height: 1.5rem;
 }
@@ -164,20 +156,20 @@ button {
     background-color: rgb(250, 0, 83);
     border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.626);    
+    box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.626);
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
   }
 
   .menu-mobile a, .menu-mobile .open-card {
-    width: 100%; 
-    text-align: left; 
-    padding: 0.5rem 0; 
-    display: block; 
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 0;
+    display: block;
   }
 
   .menu-mobile a:hover, .menu-mobile .open-card:hover {
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
   }
 }
 </style>
