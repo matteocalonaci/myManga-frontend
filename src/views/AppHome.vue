@@ -4,7 +4,7 @@ import MangaList from '../components/MangaList.vue';
 import Cart from '../components/Cart.vue';
 
 export default {
-    name: 'AppHome',
+    name: 'App',
     components: {
         MangaList,
         AppFooter,
@@ -57,16 +57,16 @@ export default {
                     <h5>{{ image.title }}</h5>
                     <p>{{ image.description }}</p>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
         <div class="text-center p-5">
             <h2>Novità</h2>
         </div>
@@ -136,7 +136,6 @@ export default {
 
      <!-- Offcanvas per il carrello -->
      <Cart /> <!-- Assicurati che il componente Cart sia incluso qui -->
-     <AppFooter />
 
 </div>
 </template>

@@ -8,7 +8,7 @@
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
         aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <i class="fa-solid fa-bars"></i>
       </button>
 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
@@ -129,8 +129,8 @@ img {
 }
 
 button {
-  color : #bb2d3b;
-  border-color: #bb2d3b;
+  color : #fbe8ea6b;
+  border-color: #ffffff;
 }
 
 .open-card {
@@ -156,7 +156,7 @@ button {
     background-color: rgb(250, 0, 83);
     border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.626);
+    box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.858);
     display: flex;
     flex-direction: column;
   }
