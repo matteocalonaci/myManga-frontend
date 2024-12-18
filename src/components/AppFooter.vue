@@ -12,8 +12,8 @@ export default {
             crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 bg-dark">
+            <div class="row" style="background-color: rgba(0, 0, 0, 0.8);">
+                <div class="col-12">
 
                     <div class="text-white d-flex flex-column flex-md-row justify-content-around p-4">
                         <div class="d-flex flex-column p-2 text-center">
@@ -48,6 +48,13 @@ export default {
                     </div>
 
                 </div>
+            </div>
+            <div class="row d-flex justify-content-between align-items-center" style="height: 3.5rem;">
+                <div class="col-6 text-white"><b>©2024 myManga s.r.l. P.IVA: xxxxxxxxxxx</b></div>
+                
+                    <div class="col-6 text-end"><img src="https://pngimg.com/d/mastercard_PNG27.png" alt="" style="height: 2rem;"></div>
+                
+
             </div>
         </div>
     </footer>
