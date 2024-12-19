@@ -20,7 +20,7 @@ export default {
                     // description: 'Descrizione dell\'immagine 1'
                 },
                 {
-                    src: 'https://mangayo.it/modules/an_homeslider/img/328226fc6f33e1dcd8d3b669494a6f04_1.jpg',
+                    src: 'https://mangayo.it/modules/an_homeslider/img/dd015f45b8f3eff56284d734d60f0590_1.png',
                     alt: 'Immagine 2',
                     // title: 'Titolo 2',
                     // description: 'Descrizione dell\'immagine 2'
@@ -145,9 +145,8 @@ export default {
 
 <style scoped>
 .carousel-item img {
-    max-height: 25rem;
     width: 100%;
-    /* Imposta l'altezza desiderata per le immagini */
+    height: auto; /* Mantieni l'aspetto corretto */
 }
 
 .card-container {
@@ -161,7 +160,7 @@ export default {
 
 
 .img-container {
-    height: 30rem;
+    height: auto;
     overflow: hidden;
 
     img {
@@ -172,8 +171,8 @@ export default {
 .card {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     width: calc((100% / 4) - 1rem);
+    height: auto;
     margin-bottom: 2rem;
-
 }
 
 .fa-heart {
@@ -192,22 +191,22 @@ export default {
     padding: 2rem;
 }
 
-.card {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    flex: 1 1 calc(25% - 1rem); /* Usa flexbox per un layout responsive */
-    margin-bottom: 2rem;
-}
 
 /* Media Queries per schermi più piccoli */
 @media (max-width: 768px) {
-    .card {
-        flex: 1 1 calc(50% - 1rem); /* 2 card per riga su schermi medi */
+ 
+    .carousel-item img {
+        height: 33vh; /* Imposta un'altezza maggiore per le immagini su schermi medi */
     }
+    
 }
 
 @media (max-width: 576px) {
     .card {
-        flex: 1 1 100%; /* 1 card per riga su schermi piccoli */
+        flex: 1 1 calc(50% - 1rem); /* 2 card per riga su schermi medi */
+    }
+    .carousel-item img {
+        height: 30vh; /* Imposta un'altezza maggiore per le immagini su schermi medi */
     }
 }
 </style>
