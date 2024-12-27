@@ -10,18 +10,15 @@
                                 @input="applyFilters" />
                             <select v-model="selectedAuthor" @change="applyFilters">
                                 <option value="">Seleziona Autore</option>
-                                <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}
-                                </option>
+                                <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}</option>
                             </select>
                             <select v-model="selectedGenre" @change="applyFilters">
                                 <option value="">Seleziona Genere</option>
-                                <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}
-                                </option>
+                                <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
                             </select>
                             <select v-model="selectedEditors" @change="applyFilters">
                                 <option value="">Seleziona Editore</option>
-                                <option v-for="editor in editors" :key="editor.id" :value="editor.id">{{ editor.name }}
-                                </option>
+                                <option v-for="editor in editors" :key="editor.id" :value="editor.id">{{ editor.name }}</option>
                             </select>
                         </div>
                         <hr>
@@ -91,50 +88,53 @@ export default {
     },
     methods: {
         loadMangas() {
-    this.isLoading = true;
-    const url = `${this.base_url}api/mangas`;
-    axios.get(url, {
-        params: {
-            per_page: 100
+            this.isLoading = true;
+            const url = `${this.base_url}api/mangas`;
+            axios.get(url, {
+                params: {
+                    per_page: 100
+                }
+            })
+            .then(response => {
+                console.log(response.data); // Controlla la risposta
+                this.mangas = response.data.mangas.data;
+                this.filteredMangas = this.mangas;
+                this.totalPages = Math.ceil(this.filteredMangas.length / this.mangasPerPage);
+
+                // Assegna i dati per autori, generi, categorie ed editori
+                this.authors = response.data.authors;
+                this.genres = response.data.genres;
+                this.editors = response.data.editors;
+
+                this.isLoading = false;
+            })
+            .catch(error => {
+                console.error("Errore nel caricamento dei manga:", error);
+                this.isLoading = false;
+            });
+        },
+        applyFilters() {
+            this.filteredMangas = this.mangas.filter(manga => {
+                const genreMatch = this.selectedGenre === '' || manga.genres.some(genre => genre.id === this.selectedGenre);
+                return (
+                    (this.filterQuery === '' || manga.title.toLowerCase().includes(this.filterQuery.toLowerCase())) &&
+                    (this.selectedAuthor === '' || manga.author_id === this.selectedAuthor) &&
+                    genreMatch &&
+                    (this.selectedEditors === '' || manga.editor_id === this.selectedEditors)
+                );
+            });
+            this.totalPages = Math.ceil(this.filteredMangas.length / this.mangasPerPage); // Ricalcola le pagine dopo il filtraggio
+            this.currentPage = 1; // Resetta alla prima pagina dopo il filtraggio
+        },
+        changePage(page) {
+            this.currentPage = page; // Cambia la pagina corrente
+            console.log('Current Page:', this.currentPage);
+            console.log('Total Pages:', this.totalPages);
+            console.log('Filtered Mangas:', this.filteredMangas.length);
         }
-    })
-    .then(response => {
-        console.log(response.data); // Controlla la risposta
-        this.mangas = response.data.mangas.data;
-        this.filteredMangas = this.mangas;
-        this.totalPages = Math.ceil(this.filteredMangas.length / this.mangasPerPage);
-
-        // Assegna i dati per autori, generi, categorie ed editori
-        this.authors = response.data.authors;
-        this.genres = response.data.genres;
-        this.categories = response.data.categories;
-        this.editors = response.data.editors;
-
-        this.isLoading = false;
-    })
-    .catch(error => {
-        console.error("Errore nel caricamento dei manga:", error);
-        this.isLoading = false;
-    });
-},
-applyFilters() {
-    this.filteredMangas = this.mangas.filter(manga => {
-        const genreMatch = this.selectedGenre === '' || manga.genres.some(genre => genre.id === this.selectedGenre);
-        return (
-            (this.filterQuery === '' || manga.title.toLowerCase().includes(this.filterQuery.toLowerCase())) &&
-            (this.selectedAuthor === '' || manga.author_id === this.selectedAuthor) &&
-            genreMatch && // Controlla se il manga ha il genere selezionato
-            (this.selectedEditors === '' || manga.editor_id === this.selectedEditors)
-        );
-    });
-    this.totalPages = Math.ceil(this.filteredMangas.length / this.mangasPerPage); // Ricalcola le pagine dopo il filtraggio
-    this.currentPage = 1; // Resetta alla prima pagina dopo il filtraggio
-}
     },
     mounted() {
         this.loadMangas(); // Carica i manga quando il componente è montato
-        console.log(this.authors);
-
     }
 }
 </script>
@@ -183,27 +183,25 @@ applyFilters() {
     background-color: white;
 }
 
-.controller .buttons button:hover {
+.controller-buttons button:hover {
     color: rgb(250, 0, 83);
 }
-
 
 .empty-card-container {
     margin: 2rem;
     text-align: center;
-    /* Centra il testo */
 }
 
-.img-container{
-    width:100%; 
-  height: auto; 
-  object-fit: cover; 
-  transition: transform 0.3s;
+.img-container {
+    width: 100%; 
+    height: auto; 
+    object-fit: cover; 
+    transition: transform 0.3s;
 }
-img{
+
+img {
     width: 100%;
 }
-
 
 .text {
     height: 100%;
@@ -227,11 +225,11 @@ img{
         margin: 2rem;
     }
 
-.text {
-    height: 100%;
-    padding: 0 0.5rem;
-    color: rgba(0, 0, 0, 0.544);
-    font-size: 1.5rem;
-}
+    .text {
+        height: 100%;
+        padding: 0 0.5rem;
+        color: rgba(0, 0, 0, 0.544);
+        font-size: 1.5rem;
+    }
 }
 </style>

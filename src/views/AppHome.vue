@@ -26,7 +26,7 @@ export default {
                     // description: 'Descrizione dell\'immagine 2'
                 },
                 {
-                    src: 'https://mangayo.it/modules/an_homeslider/img/2697fb2f2eaa0f3d9443fc40a03bc53c_1.jpg',
+                    src: 'https://mangayo.it/modules/an_homeslider/img/9b33aebf678865b1ef6e24b397e1c990_1.png',
                     alt: 'Immagine 3',
                     // title: 'Titolo 3',
                     // description: 'Descrizione dell\'immagine 3'
@@ -76,7 +76,10 @@ export default {
                 <!-- OSHI NO KO 15 -->
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
+                        <a :href="'http://localhost:5174/manga/oshi-no-ko-15-my-star'" target="_blank">
+
                         <img src="https://mangayo.it/41589-large_default/oshi-no-ko-15-my-star.jpg" alt="">
+                        </a>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Oshi no ko 15 - My Star</h6>
@@ -90,7 +93,9 @@ export default {
                 <!-- HIRAUASUMI 7 -->
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
+                        <a :href="'http://localhost:5174/manga/hirayasumi-7'" target="_blank">
                         <img src="https://mangayo.it/41156-large_default/hirayasumi-7.jpg" alt="">
+                        </a>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Hirayasumi 7</h6>
@@ -104,7 +109,10 @@ export default {
                 <!-- BLUE LOCK 26 -->
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
+                     
+                        <a :href="'http://localhost:5174/manga/blue-lock-26'" target="_blank">
                         <img src="https://mangayo.it/40607-large_default/blue-lock-26.jpg" alt="">
+                        </a>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Blue Lock 26</h6>
@@ -118,7 +126,9 @@ export default {
                 <!-- HEAVENLY DELUSION 10 -->
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
+                        <a :href="'http://localhost:5174/manga/heavenly-delusion-10'" target="_blank">
                         <img src="https://mangayo.it/40585-large_default/heavenly-delusion-10.jpg" alt="">
+                        </a>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Heavenly Delusion 10</h6>
@@ -146,7 +156,7 @@ export default {
 <style scoped>
 .carousel-item img {
     width: 100%;
-    height: auto; /* Mantieni l'aspetto corretto */
+    height: auto;
 }
 
 .card-container {
