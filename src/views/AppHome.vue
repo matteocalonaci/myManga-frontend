@@ -76,10 +76,11 @@ export default {
                 <!-- OSHI NO KO 15 -->
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
-                        <a :href="'http://localhost:5174/manga/oshi-no-ko-15-my-star'" target="_blank">
+
+                        <router-link :to="{ name: 'MangaShow', params: { slug: 'oshi-no-ko-15-my-star' } }">
 
                         <img src="https://mangayo.it/41589-large_default/oshi-no-ko-15-my-star.jpg" alt="">
-                        </a>
+                        </router-link>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Oshi no ko 15 - My Star</h6>
@@ -93,9 +94,9 @@ export default {
                 <!-- HIRAUASUMI 7 -->
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
-                        <a :href="'http://localhost:5174/manga/hirayasumi-7'" target="_blank">
-                        <img src="https://mangayo.it/41156-large_default/hirayasumi-7.jpg" alt="">
-                        </a>
+                        <router-link :to="{ name: 'MangaShow', params: { slug: 'hirayasumi-7' } }">
+                            <img src="https://mangayo.it/41156-large_default/hirayasumi-7.jpg" alt="">
+                            </router-link>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Hirayasumi 7</h6>
@@ -110,9 +111,9 @@ export default {
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
                      
-                        <a :href="'http://localhost:5174/manga/blue-lock-26'" target="_blank">
-                        <img src="https://mangayo.it/40607-large_default/blue-lock-26.jpg" alt="">
-                        </a>
+                        <router-link :to="{ name: 'MangaShow', params: { slug: 'blue-lock-26' } }">
+                            <img src="https://mangayo.it/40607-large_default/blue-lock-26.jpg" alt="">
+                            </router-link>  
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Blue Lock 26</h6>
@@ -126,9 +127,9 @@ export default {
                 <!-- HEAVENLY DELUSION 10 -->
                 <div class="card" :style="{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)' }">
                     <div class="img-container" :style="{ borderRadius: '10px 10px 0 0' }">
-                        <a :href="'http://localhost:5174/manga/heavenly-delusion-10'" target="_blank">
+                        <router-link :to="{ name: 'MangaShow', params: { slug: 'heavenly-delusion-10' } }">
                         <img src="https://mangayo.it/40585-large_default/heavenly-delusion-10.jpg" alt="">
-                        </a>
+                        </router-link>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title pb-2 text-center"> Heavenly Delusion 10</h6>
