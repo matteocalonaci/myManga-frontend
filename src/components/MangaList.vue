@@ -41,8 +41,7 @@
                     </button>
                 </div>
             </div>
-            <!-- Pulsante Torna Su -->
-            <!-- <button class="scroll-to-top" :class="{ 'animate': isAnimating }" @click="scrollToTop">↑ Torna Su</button> -->
+          
         </div>
     </div>
     </div>
@@ -126,23 +125,13 @@ export default {
             this.currentPage = 1; // Resetta alla prima pagina dopo il filtraggio
         },
         changePage(page) {
+            const container = document.querySelector('.general-container');
+            container.scrollTop = 100; // Imposta scrollTop a 100 per testare lo scrolling
             console.log('Change Page Called'); // Debugging
             this.currentPage = page; // Cambia la pagina corrente
             console.log('Current Page:', this.currentPage);
             this.scrollToTop(); // Chiama scrollToTop quando cambi pagina
         },
-        scrollToTop() {
-            const container = this.$refs.generalContainer;
-            this.isAnimating = true; // Inizia l'animazione
-            if (container) {
-                container.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            setTimeout(() => {
-                this.isAnimating = false; // Ferma l'animazione
-            }, 300); // Durata dell'animazione
-        }
 
     },
     mounted() {
