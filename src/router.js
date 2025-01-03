@@ -91,14 +91,14 @@ const router = createRouter({
       component: WishList,
     },
   ],
-  scrollBehavior(to, from, savedPosition) {
+scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition;
+        return savedPosition;
     } else {
-      return { top: 0 };
+        return { top: 0 };
     }
-  }
-});
+}
+});  
 
 router.beforeEach((to, from, next) => {
   loading.value = true;

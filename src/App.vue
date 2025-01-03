@@ -23,11 +23,11 @@ export default {
     const generalContainer = ref(null);
 
     watch(() => router.currentRoute.value, () => {
-      store.isCartVisible = false;
-      if (generalContainer.value) {
-        generalContainer.value.scrollTop = 0;
-      }
-    });
+    store.isCartVisible = false;
+    if (generalContainer.value) {
+        generalContainer.value.scrollTop = 0; // Scorri all'inizio del contenitore
+    }
+});
 
     return { generalContainer };
   },

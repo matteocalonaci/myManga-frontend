@@ -1,77 +1,3 @@
-        <script>
-        import axios from 'axios';
-        import LoadingScreen from '../components/LoadingScreen.vue';
-        import Cart from '../components/Cart.vue'; 
-        import AppFooter from '../components/AppFooter.vue';
-        import { store } from '../store'; 
-        
-        export default {
-            name: 'MangaShow',
-            components: {
-                LoadingScreen,
-                Cart,
-                AppFooter
-            },
-            data() {
-                return {
-                    base_url: 'http://localhost:8000/',
-                    manga: null,
-                    loading: true,
-                    isLiked: false,
-                    quantity: 1,
-                };
-            },
-            mounted() {
-                this.getManga();
-            },
-            methods: {
-                getManga() {
-                    const slug = this.$route.params.slug;
-                    const url = `${this.base_url}api/mangas/${slug}`;
-        
-                    axios.get(url)
-                        .then(response => {
-                            console.log("Risposta dell'API:", response.data);
-                            this.manga = response.data.manga;
-                        })
-                        .catch(error => {
-                            console.error("Si è verificato un errore durante il recupero del manga:", error);
-                        })
-                        .finally(() => {
-                            this.loading = false;
-                        });
-                },
-                toggleLike() {
-                    this.isLiked = !this.isLiked;
-                },
-                increaseQuantity() {
-                    this.quantity++;
-                },
-                decreaseQuantity() {
-                    if (this.quantity > 1) {
-                        this.quantity--;
-                    }
-                },
-                addToCart() {
-                    const mangaWithQuantity = { ...this.manga, quantity: this.quantity };
-                    store.addToCart(mangaWithQuantity);
-                    console.log(`Aggiunto ${this.quantity} di ${this.manga.title} al carrello.`);
-                },
-            },
-            computed: {
-                iconStyle() {
-                    return {
-                        backgroundColor: 'black',
-                        borderRadius: '50%',
-                        padding: '0.5rem',
-                        display: 'inline-block',
-                        color: this.isLiked ? 'red' : 'black',
-                    };
-                },
-            },
-        };
-        </script>
-        
 <template>
     <LoadingScreen v-if="loading" />
 
@@ -107,7 +33,6 @@
                         <div class="d-flex flex-column flex-md-row justify-content-center align-items-center mt-3">
                             <button class="addToCart flex-grow-1" @click="addToCart">Aggiungi al carrello <i class="fa-solid fa-cart-shopping"></i></button>
                         </div>
-                        <Cart />
                     </div>
                 </div>
             </div>
@@ -123,10 +48,88 @@
     <div v-else>
         <p>Manga non trovato.</p>
     </div>
-    <AppFooter />
-
+    <Cart />
 </template>
 
+<script>
+import axios from 'axios';
+import LoadingScreen from '../components/LoadingScreen.vue';
+import Cart from '../components/Cart.vue'; 
+import { store } from '../store'; 
+import { computed } from 'vue';
+
+export default {
+    name: 'MangaShow',
+    components: {
+        LoadingScreen,
+        Cart
+    },
+    data() {
+        return {
+            base_url: 'http://localhost:8000/',
+            manga: null,
+            loading: true,
+            isLiked: false,
+        };
+    },
+    mounted() {
+        this.getManga();
+    },
+    methods: {
+        getManga() {
+            const slug = this.$route.params.slug;
+            const url = `${this.base_url}api/mangas/${slug}`;
+
+            axios.get(url)
+                .then(response => {
+                    this.manga = response.data.manga;
+                    this.checkIfLiked(); // Controlla se il manga è nella wishlist
+                })
+                .catch(error => {
+                    console.error("Si è verificato un errore durante il recupero del manga:", error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        toggleLike() {
+            this.isLiked = !this.isLiked;
+            if (this.isLiked) {
+                this.addWishList();
+            } else {
+                this.removeWishList();
+            }
+        },
+        addWishList() {
+            store.addToWishList(this.manga); // Aggiungi il manga alla wishlist nel tuo store
+        },
+        removeWishList() {
+            store.removeFromWishList(this.manga); // Rimuovi il manga dalla wishlist nel tuo store
+        },
+        checkIfLiked() {
+            if (this.manga) {
+                this.isLiked = store.wishList.some(item => item.id === this.manga.id); // Controlla se il manga è già nella wishlist
+            }
+        },
+        addToCart() {
+            const mangaWithQuantity = { ...this.manga, quantity: 1 }; // Aggiungi il manga al carrello
+            store.addToCart(mangaWithQuantity); // Aggiungi il manga al carrello nel tuo store
+            console.log(`Aggiunto 1 di ${this.manga.title} al carrello.`);
+        },
+    },
+    computed: {
+        iconStyle() {
+            return {
+                backgroundColor: 'black',
+                borderRadius: '50%',
+                padding: '0.5rem',
+                display: 'inline-block',
+                color: this.isLiked ? 'red' : 'black',
+            };
+        },
+    },
+};
+</script>
 
 <style scoped>
 .genre {
@@ -140,7 +143,7 @@
 .fa-heart {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
+    right: 1.5rem;
     font-size: 1.5rem;
     transition: color 0.3s ease;
 }
@@ -168,35 +171,6 @@
     max-height: 32.5rem;
     border-radius: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.377);
-}
-
-.quantiy-btn {
-    padding: 1rem 2rem;
-    border-radius: 2rem;
-    color: rgb(250, 0, 83);
-    border: 0.1rem solid rgb(250, 0, 83);
-}
-
-.quantity {
-    padding: 0 3rem;
-}
-
-.pulsanti {
-    border: none;
-    color: rgb(250, 0, 83);
-    background-color: white;
- font-size: 1rem;
-}
-
-.quantiy-btn:hover {
-    background-color: black;
-    color: white;
-    border: 0.1rem solid black;
-}
-
-.quantiy-btn:hover .pulsanti {
-    color: white;
-    background-color: black;
 }
 
 .addToCart {

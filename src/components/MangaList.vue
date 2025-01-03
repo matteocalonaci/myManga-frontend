@@ -1,13 +1,10 @@
 <template>
-    <div>
-        <LoadingScreen v-if="isLoading" /> <!-- Mostra il caricamento se isLoading è true -->
-        <div v-if="!isLoading">
-            <div class="container" style="background-color: rgb(250, 0, 83);">
+    <div> <LoadingScreen v-if="isLoading" />
+        <div v-if="!isLoading"><div class="container" style="background-color: rgb(250, 0, 83);" ref="generalContainer">
                 <div class="row mt-5">
                     <div class="col-12">
                         <div class="search-filters d-flex justify-content-center">
-                            <input type="text" v-model="filterQuery" placeholder="Cerca per titolo..."
-                                @input="applyFilters" />
+                            <input type="text" v-model="filterQuery" placeholder="Cerca per titolo..." @input="applyFilters" />
                             <select v-model="selectedAuthor" @change="applyFilters">
                                 <option value="">Seleziona Autore</option>
                                 <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}</option>
@@ -23,6 +20,7 @@
                         </div>
                         <hr>
                         <div class="card-container d-flex justify-content-center align-items-center">
+                            <div class="card-container d-flex justify-content-center align-items-center">
                             <div v-if="filteredMangas.length === 0" class="empty-card-container">
                                 <p class="text"><b>NESSUN RISULTATO TROVATO</b></p>
                                 <div class="img-container">
@@ -30,8 +28,7 @@
                                 </div>
                             </div>
                             <div v-for="manga in paginatedMangas" :key="manga.id" class="card-wrapper">
-                                <Single_Manga :manga="manga" :wishList="wishList" @add-to-wishlist="toggleWishList"
-                                    @remove-from-wishlist="toggleWishList" />
+                                <Single_Manga :manga="manga" :wishList="wishList" @add-to-wishlist="toggleWishList" @remove-from-wishlist="toggleWishList" />
                             </div>
                         </div>
                     </div>
@@ -39,13 +36,15 @@
             </div>
             <div class="pagination" v-if="totalPages > 1">
                 <div class="controller-buttons">
-                    <button v-for="page in totalPages" :key="page" @click="changePage(page)"
-                        :class="{ active: currentPage === page }">
+                    <button v-for="page in totalPages" :key="page" @click="changePage(page)" :class="{ active: currentPage === page }">
                         {{ page }}
                     </button>
                 </div>
             </div>
+            <!-- Pulsante Torna Su -->
+            <!-- <button class="scroll-to-top" :class="{ 'animate': isAnimating }" @click="scrollToTop">↑ Torna Su</button> -->
         </div>
+    </div>
     </div>
 </template>
 
@@ -127,11 +126,24 @@ export default {
             this.currentPage = 1; // Resetta alla prima pagina dopo il filtraggio
         },
         changePage(page) {
+            console.log('Change Page Called'); // Debugging
             this.currentPage = page; // Cambia la pagina corrente
             console.log('Current Page:', this.currentPage);
-            console.log('Total Pages:', this.totalPages);
-            console.log('Filtered Mangas:', this.filteredMangas.length);
+            this.scrollToTop(); // Chiama scrollToTop quando cambi pagina
+        },
+        scrollToTop() {
+            const container = this.$refs.generalContainer;
+            this.isAnimating = true; // Inizia l'animazione
+            if (container) {
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            setTimeout(() => {
+                this.isAnimating = false; // Ferma l'animazione
+            }, 300); // Durata dell'animazione
         }
+
     },
     mounted() {
         this.loadMangas(); // Carica i manga quando il componente è montato
@@ -158,11 +170,13 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    min-width: 5rem;
     gap: 1rem;
 }
 
 .card-wrapper {
     width: calc((100% / 4) - 1rem);
+    min-width: 16rem;
     margin-bottom: 2rem;
 }
 
@@ -209,7 +223,23 @@ img {
     color: rgba(0, 0, 0, 0.544);
     font-size: 2rem;
 }
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgb(250, 0, 83);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.3s ease; /* Aggiungi transizione */
+}
 
+.scroll-to-top.animate {
+    transform: translateY(0); /* Posizione originale */
+}
 @media (max-width: 768px) {
     .card-wrapper {
         width: calc((100% / 2) - 1rem);

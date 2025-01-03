@@ -51,22 +51,22 @@ export default {
       
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item pt-5" v-for="(image, index) in images" :key="index" :class="{ active: index === 0 }">
-                <img :src="image.src" class="d-block w-100" :alt="image.alt">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>{{ image.title }}</h5>
-                    <p>{{ image.description }}</p>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+        <div class="carousel-item pt-5" v-for="(image, index) in images" :key="index" :class="{ active: index === 0 }">
+            <img :src="image.src" class="d-block w-100" :alt="image.alt">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ image.title }}</h5>
+                <p>{{ image.description }}</p>
             </div>
         </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
         <div class="text-center p-5">
             <h2>Novità</h2>
         </div>
@@ -146,7 +146,7 @@ export default {
     </div>
 
      <!-- Offcanvas per il carrello -->
-     <Cart /> <!-- Assicurati che il componente Cart sia incluso qui -->
+     <Cart /> 
      <AppFooter />
 
 
@@ -155,6 +155,10 @@ export default {
 
 
 <style scoped>
+.carousel-item {
+    transition: transform 0.35s ease-in-out; 
+}
+
 .carousel-item img {
     width: 100%;
     height: auto;

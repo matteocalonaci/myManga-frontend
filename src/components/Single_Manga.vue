@@ -124,6 +124,9 @@ export default {
   transition: color 0.3s ease;
 }
 
+.card{
+  min-width: 10rem;
+}
 
 .addToCart {
   padding: 0.5rem 2rem;
