@@ -36,40 +36,38 @@ export default {
 
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Arial', sans-serif;
-  background-color: rgb(250, 0, 83); 
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 #app {
-  display: flex;
-  flex-direction: column; 
-  height: 100%; 
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .general-container {
-  flex: 1; 
-  margin-top: 8rem; 
-  background-color: rgb(250, 0, 83);
-  overflow-y: auto; 
-  -webkit-overflow-scrolling: auto; 
+    flex: 1; 
+    margin-top: 8rem; 
+    background-color: rgb(250, 0, 83);
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch; /* Cambiato in 'touch' per il supporto mobile */
 }
 
 /* Personalizzazione della scrollbar per Webkit (Chrome, Safari) */
 .general-container::-webkit-scrollbar {
-  width: 0.8rem; 
+    width: 0.8rem; 
 }
 
 .general-container::-webkit-scrollbar-thumb {
-  background-color: rgb(176, 0, 59);
-  border-radius: 10px; 
+    background-color: rgb(176, 0, 59);
+    border-radius: 10px; 
 }
 
 .general-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1); 
-  border-radius: 1rem; 
+    background: rgba(0, 0, 0, 0.1); 
+    border-radius: 1rem; 
 }
 
 
