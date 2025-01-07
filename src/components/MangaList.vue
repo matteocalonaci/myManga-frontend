@@ -41,7 +41,6 @@
                     </button>
                 </div>
             </div>
-          
         </div>
     </div>
     </div>
@@ -126,12 +125,12 @@ export default {
         },
         changePage(page) {
             const container = document.querySelector('.general-container');
-            container.scrollTop = 100; // Imposta scrollTop a 100 per testare lo scrolling
+            container.scrollTop = 20; // Imposta scrollTop a 100 per testare lo scrolling     
             console.log('Change Page Called'); // Debugging
             this.currentPage = page; // Cambia la pagina corrente
             console.log('Current Page:', this.currentPage);
-            this.scrollToTop(); // Chiama scrollToTop quando cambi pagina
         },
+        
 
     },
     mounted() {
@@ -212,23 +211,7 @@ img {
     color: rgba(0, 0, 0, 0.544);
     font-size: 2rem;
 }
-.scroll-to-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgb(250, 0, 83);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: transform 0.3s ease; /* Aggiungi transizione */
-}
 
-.scroll-to-top.animate {
-    transform: translateY(0); /* Posizione originale */
-}
 @media (max-width: 768px) {
     .card-wrapper {
         width: calc((100% / 2) - 1rem);

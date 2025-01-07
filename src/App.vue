@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <AppHeader />
-    <div class="general-container" ref="generalContainer">
+    <div class="general-container" ref="generalContainer" @scroll="handleScroll">
       <router-view />
     </div>
+    <!-- Pulsante Torna Su -->
+    <button class="scroll-to-top" v-if="showScrollButton" @click="scrollToTop"><i class="fa-solid fa-arrow-up"></i></button>
   </div>
 </template>
 
@@ -21,16 +23,29 @@ export default {
   setup() {
     const router = useRouter();
     const generalContainer = ref(null);
+    const showScrollButton = ref(false);
 
     watch(() => router.currentRoute.value, () => {
-    store.isCartVisible = false;
-    if (generalContainer.value) {
+      store.isCartVisible = false;
+      if (generalContainer.value) {
         generalContainer.value.scrollTop = 0; // Scorri all'inizio del contenitore
-    }
-});
+      }
+    });
 
-    return { generalContainer };
-  },
+    const handleScroll = () => {
+      if (generalContainer.value) {
+        showScrollButton.value = generalContainer.value.scrollTop > 1000; 
+      }
+    };
+
+    const scrollToTop = () => {
+      if (generalContainer.value) {
+        generalContainer.value.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    return { generalContainer, showScrollButton, scrollToTop, handleScroll };
+  }
 };
 </script>
 
@@ -70,5 +85,17 @@ html, body {
     border-radius: 1rem; 
 }
 
-
+.scroll-to-top {
+    position: fixed;
+    bottom: 5rem;
+    right: 2rem;
+    background-color: rgb(255, 255, 255);
+    color: rgb(250, 0, 83);
+    border: none;
+    border-radius: 100%;
+    padding: 0.5rem 0.9rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.3s ease; /* Aggiungi transizione per l'opacità */
+}
 </style>
