@@ -34,7 +34,7 @@ export default {
 
     const handleScroll = () => {
       if (generalContainer.value) {
-        showScrollButton.value = generalContainer.value.scrollTop > 1000; 
+        showScrollButton.value = generalContainer.value.scrollTop > 200; 
       }
     };
 

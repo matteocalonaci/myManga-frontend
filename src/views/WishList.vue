@@ -68,7 +68,7 @@ export default {
       </div>
       <div v-else>
         <div class="empty-img-container d-flex justify-content-center">
-          <img src="https://cdn.anisearch.it/images/character/screen/111/111318/full/625652.webp" alt="" style="width: 50rem;">
+          <img src="https://cdn.anisearch.it/images/character/screen/111/111318/full/625652.webp" alt="" style="width: 46rem;">
         </div>
         <p class="empty-message">La tua wishlist è vuota.</p>
       </div>
@@ -151,7 +151,6 @@ export default {
 
 .card-img {
   width: 100%;
-  height: 100%;
   object-fit: cover;
   transition: transform 0.3s;
 }
