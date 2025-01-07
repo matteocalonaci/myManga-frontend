@@ -1,10 +1,10 @@
 <template>
-<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
-  <div class="offcanvas-header">
-    <h3 id="cartOffcanvasLabel" class="text-white"><b>Carrello</b></h3>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h3 id="cartOffcanvasLabel" class="text-white"><b>Carrello</b></h3>
+      <button type="button" class="btn-close" @click="closeCart" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
       <p v-if="cartItems.length === 0">Il carrello è vuoto.</p>
       <div v-if="cartItems.length > 0" class="mb-3">
         <button class="btn btn-danger" @click="confirmClearCart">Svuota Carrello</button>
@@ -72,128 +72,82 @@ export default {
       return total.toFixed(2); 
     },
     shippingCost() {
-      const thresholdForFreeShipping = 39; // spedizione gratuita
-      return parseFloat(this.cartTotal) < thresholdForFreeShipping ? 5.50 : 0; // Costo di spedizione
+      const thresholdForFreeShipping = 39; 
+      return parseFloat(this.cartTotal) < thresholdForFreeShipping ? 5.50 : 0; 
     },
     remainingForFreeShipping() {
-      const thresholdForFreeShipping = 39; // spedizione gratuita
-      return thresholdForFreeShipping - parseFloat(this.cartTotal);
+      const thresholdForFreeShipping = 39; 
+      return Math.max(0, thresholdForFreeShipping - parseFloat(this.cartTotal)); 
     }
   },
   methods: {
-    removeFromCart(manga) {
-      store.removeFromCart(manga);
+    closeCart() {
+      this.$emit('close-cart'); 
     },
-
     confirmClearCart() {
       Swal.fire({
-        title: 'Sei sicuro di voler svuotare il carrello?',
-        text: "Questa azione non può essere annullata!",
+        title: 'Sei sicuro?',
+        text: "Vuoi svuotare il carrello?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sì, svuota il carrello!',
-        cancelButtonText: 'Annulla'
+        confirmButtonText: 'Sì, svuota!'
       }).then((result) => {
         if (result.isConfirmed) {
-          this.clearManga();
+          store.clearCart(); 
+          Swal.fire('Svuotato!', 'Il carrello è stato svuotato.', 'success');
         }
       });
     },
-
-    clearManga() {
-      store.clearCart(); 
-      Swal.fire({
-        title: 'Carrello svuotato!',
-        text: 'Tutti i manga sono stati rimossi dal carrello.',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      });
-    },
-
     increaseQuantity(manga) {
-      store.increaseQuantity(manga);
+      store.updateQuantity(manga.id, manga.quantity + 1); 
     },
-
     decreaseQuantity(manga) {
-      store.decreaseQuantity(manga);
+      if (manga.quantity > 1) {
+        store.updateQuantity(manga.id, manga.quantity - 1); 
+      }
     },
-
-    openCart() {
-    console.log('Apertura del carrello...'); 
-    const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-    cartOffcanvas.show();
-}
-  },
-  mounted() {
-    if (store.isCartVisible) {
-      this.openCart();
-    }
-  },
-  watch: {
-    'store.isCartVisible': function(newValue) {
-      if (newValue) {
-        this.openCart();
+    removeFromCart(manga) {
+      store.removeFromCart(manga.id); 
+    },
+    handleClickOutside(event) {
+      const offcanvas = this.$el.querySelector('.offcanvas');
+      if (offcanvas && !offcanvas.contains(event.target)) {
+        this.closeCart(); 
       }
     }
+  },
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside);
   }
 }
 </script>
 
 <style scoped>
-.offcanvas-body {
-  max-height: 100vh; 
-  overflow-y: scroll; /* Permette lo scrolling */
-  color: white;
-  background-color: rgb(198, 23, 81);
+.offcanvas {
+  background-color: #343a40; 
+  color: white; 
 }
-
-.offcanvas-body::-webkit-scrollbar {
-  display: none; /* Nasconde la scrollbar */
-}
-.offcanvas-end {
-  background-color: rgb(198, 23, 81);
-}
-
 .manga-image {
-  width: 6rem; 
+  width: 50px; 
   height: auto; 
-  border-radius: 5px; 
 }
-
-.quantiy-btn {
-  padding: 0.1rem 0.8rem;
-  width: 6rem;
-  border-radius: 2rem;
-  color: rgb(250, 0, 83);
-  border: 0.1rem solid rgb(250, 0, 83);
-}
-
 .pulsanti {
-  border: none;
-  color: rgb(250, 0, 83);
-  background-color: white;
-  font-size: 1rem;
+  background-color: #007bff; 
+  color: white; 
+  border: none; 
+  padding: 0.5rem; 
+  border-radius: 0.25rem; 
 }
-
-.quantiy-btn:hover {
-  background-color: black;
-  color: white;
-  border: 0.1rem solid black;
-}
-
-.quantiy-btn:hover .pulsanti {
-  color: white;
-  background-color: black;
-}
-
 .checkout-button {
-  padding: 1rem 2rem;
-  background-color: rgb(250, 0, 83);
-  border-radius: 2rem;
-  border: none;
-  border: 0.1rem solid white;
-  color: white;
+  background-color: #28a745; 
+  color: white; 
+  border: none; 
+  padding: 0.5rem 1rem; 
+  border-radius: 0.25rem; 
 }
 </style>
