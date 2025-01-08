@@ -6,20 +6,20 @@
                 <div class="row mt-5">
                     <div class="col-12">
                         <div class="search-filters d-flex justify-content-center">
-    <input type="text" v-model="filterQuery" placeholder="Cerca per titolo..." @input="applyFilters" />
-    <select v-model="selectedAuthor" @change="applyFilters">
-        <option value="">Seleziona Autore</option>
-        <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}</option>
-    </select>
-    <select v-model="selectedGenre" @change="applyFilters">
-        <option value="">Seleziona Genere</option>
-        <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
-    </select>
-    <select v-model="selectedEditors" @change="applyFilters">
-        <option value="">Seleziona Editore</option>
-        <option v-for="editor in editors" :key="editor.id" :value="editor.id">{{ editor.name }}</option>
-    </select>
-</div>
+                            <input type="text" v-model="filterQuery" placeholder="Cerca per titolo..." @input="applyFilters" />
+                            <select v-model="selectedAuthor" @change="applyFilters">
+                                <option value="">Seleziona Autore</option>
+                                <option v-for="author in authors" :key="author.id" :value="author.id">{{ author.name }}</option>
+                            </select>
+                            <select v-model="selectedGenre" @change="applyFilters">
+                                <option value="">Seleziona Genere</option>
+                                <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
+                            </select>
+                            <select v-model="selectedEditors" @change="applyFilters">
+                                <option value="">Seleziona Editore</option>
+                                <option v-for="editor in editors" :key="editor.id" :value="editor.id">{{ editor.name }}</option>
+                            </select>
+                        </div>
                         <hr>
                         <div class="card-container d-flex justify-content-center align-items-center">
                             <div v-if="filteredMangas.length === 0" class="empty-card-container">
@@ -28,7 +28,7 @@
                                     <img src="../assets/img/sad-kana.webp" alt="">
                                 </div>
                             </div>
-                            <div v-for="manga in paginatedMangas" :key="manga.id" class="card-wrapper">
+                            <div v-for="manga in paginatedMangas " :key="manga.id" class="card-wrapper">
                                 <Single_Manga :manga="manga" :wishList="wishList" @add-to-wishlist="toggleWishList"
                                     @remove-from-wishlist="toggleWishList" />
                             </div>
@@ -37,31 +37,28 @@
                 </div>
             </div>
             <div class="pagination" v-if="totalPages > 1">
-                <div class="controller-buttons">
-                    <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="prev-button">
-                        <span class="mobile-only">&lt;</span>
-                        <span class="desktop-only">Precedente</span>
-                    </button>
+    <div class="controller-buttons">
+        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="prev-button">
+            <span class="mobile-only"><i class="fa-solid fa-chevron-left"></i></span>
+            <span class="desktop-only">Precedente</span>
+        </button>
 
-                    <button v-if="currentPage > 3" @click="changePage(1)">1</button>
-                    <span v-if="currentPage > 4">...</span>
+        <button v-if="currentPage > 3" @click="changePage(1)">1</button>
+        <span v-if="currentPage > 4">...</span>
 
-                    <button v-if="currentPage > 2" @click="changePage(currentPage - 1)">{{ currentPage - 1 }}</button>
-                    <button class="active">{{ currentPage }}</button>
-                    <button v-if="currentPage < totalPages - 1" @click="changePage(currentPage + 1)">{{ currentPage + 1
-                        }}</button>
+        <button v-if="currentPage > 2" @click="changePage(currentPage - 1)">{{ currentPage - 1 }}</button>
+        <button class="active">{{ currentPage }}</button>
+        <button v-if="currentPage < totalPages - 1" @click="changePage(currentPage + 1)">{{ currentPage + 1 }}</button>
 
-                    <span v-if="currentPage < totalPages - 3">...</span>
-                    <button v-if="currentPage < totalPages - 1" @click="changePage(totalPages)">{{ totalPages
-                        }}</button>
+        <span v-if="currentPage < totalPages - 3">...</span>
+        <button v-if="currentPage < totalPages - 1" @click="changePage(totalPages)">{{ totalPages }}</button>
 
-                    <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages"
-                        class="next-button">
-                        <span class="mobile-only">&gt;</span>
-                        <span class="desktop-only">Successivo</span>
-                    </button>
-                </div>
-            </div>
+        <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="next-button">
+            <span class="mobile-only"><i class="fa-solid fa-chevron-right"></i></span>
+            <span class="desktop-only">Successivo</span>
+        </button>
+    </div>
+</div>
         </div>
     </div>
 </template>
@@ -250,12 +247,13 @@ img {
 }
 
 .mobile-only {
-    display: none;
+    display: none; 
 }
 
 .desktop-only {
-    display: inline;
+    display: inline; 
 }
+
 
 @media (max-width: 768px) {
     .card-wrapper {
@@ -265,6 +263,14 @@ img {
     .pagination {
         padding: 1rem;
     }
+    .mobile-only {
+        display: inline; 
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
 }
 
 @media (max-width: 576px) {
@@ -282,11 +288,11 @@ img {
     }
 
     .mobile-only {
-        display: none;
+        display: inline; 
     }
 
     .desktop-only {
-        display: inline;
+        display: none;
     }
 
     .text {
