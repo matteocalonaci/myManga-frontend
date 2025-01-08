@@ -31,7 +31,7 @@
       <div v-if="cartItems.length > 0" class="mt-3">
         <h6 class="d-flex justify-content-between">Totale parziale: <span>€{{ cartTotal }}</span></h6>
         <h6 class="d-flex justify-content-between">
-          Spedizione: 
+ Spedizione: 
           <span>
             {{ shippingCost > 0 ? '€' + shippingCost.toFixed(2) : 'Gratis' }}
           </span>
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     closeCart() {
-      this.$emit('close-cart'); 
+      store.closeCart(); 
     },
     confirmClearCart() {
       Swal.fire({
@@ -101,15 +101,15 @@ export default {
       });
     },
     increaseQuantity(manga) {
-      store.updateQuantity(manga.id, manga.quantity + 1); 
+      store.increaseQuantity(manga); 
     },
     decreaseQuantity(manga) {
       if (manga.quantity > 1) {
-        store.updateQuantity(manga.id, manga.quantity - 1); 
+        store.decreaseQuantity(manga); 
       }
     },
     removeFromCart(manga) {
-      store.removeFromCart(manga.id); 
+      store.removeFromCart(manga); 
     },
     handleClickOutside(event) {
       const offcanvas = this.$el.querySelector('.offcanvas');
@@ -128,26 +128,58 @@ export default {
 </script>
 
 <style scoped>
-.offcanvas {
-  background-color: #343a40; 
-  color: white; 
+.offcanvas-body {
+  max-height: 100vh; 
+  overflow-y: scroll; 
+  color: white;
+  background-color: rgb(198, 23, 81);
 }
+
+.offcanvas-body::-webkit-scrollbar {
+  display: none; 
+}
+.offcanvas-end {
+  background-color: rgb(198, 23, 81);
+}
+
 .manga-image {
-  width: 50px; 
+  width: 6rem; 
   height: auto; 
+  border-radius: 5px; 
 }
+
+.quantiy-btn {
+  padding: 0.1rem 0.8rem;
+  width: 6rem;
+  border-radius: 2rem;
+  color: rgb(250, 0, 83);
+  border: 0.1rem solid rgb(250, 0, 83);
+}
+
 .pulsanti {
-  background-color: #007bff; 
-  color: white; 
-  border: none; 
-  padding: 0.5rem; 
-  border-radius: 0.25rem; 
+  border: none;
+  color: rgb(250, 0, 83);
+  background-color: white;
+  font-size: 1rem;
 }
+
+.quantiy-btn:hover {
+  background-color: black;
+  color: white;
+  border: 0.1rem solid black;
+}
+
+.quantiy-btn:hover .pulsanti {
+  color: white;
+  background-color: black;
+}
+
 .checkout-button {
-  background-color: #28a745; 
-  color: white; 
-  border: none; 
-  padding: 0.5rem 1rem; 
-  border-radius: 0.25rem; 
+  padding: 1rem 2rem;
+  background-color: rgb(250, 0, 83);
+  border-radius: 2rem;
+  border: none;
+  border: 0.1rem solid white;
+  color: white;
 }
 </style>

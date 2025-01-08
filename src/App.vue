@@ -96,6 +96,8 @@ html, body {
     padding: 0.5rem 0.9rem;
     cursor: pointer;
     font-size: 1rem;
-    transition: opacity 0.3s ease; /* Aggiungi transizione per l'opacità */
+    transition: opacity 0.3s ease; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+
 }
 </style>

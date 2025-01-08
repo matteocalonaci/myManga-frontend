@@ -29,19 +29,19 @@
   
   <style scoped>
   .custom-toast {
-    display: flex; /* Usa flexbox per allineare l'immagine e il testo */
-    align-items: center; /* Allinea verticalmente al centro */
+    display: flex;
+    align-items: center; 
     color: white;
-    transition: opacity 0.5s ease; /* Transizione per l'opacità */
+    transition: opacity 0.5s ease; 
   }
   
   .manga-image {
-    width: 5rem; /* Imposta una larghezza fissa per l'immagine */
-    height: auto; /* Mantieni le proporzioni */
-    margin-right: 10px; /* Spazio tra l'immagine e il testo */
+    width: 5rem; 
+    height: auto; 
+    margin-right: 1rem;
   }
   
   .toast-content {
-    flex-grow: 1; /* Permette al contenuto di espandersi */
+    flex-grow: 1; 
   }
   </style>

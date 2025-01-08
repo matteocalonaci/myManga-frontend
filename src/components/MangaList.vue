@@ -70,7 +70,6 @@
 import axios from 'axios';
 import LoadingScreen from './LoadingScreen.vue';
 import Single_Manga from './Single_Manga.vue';
-import { store } from '../store'; // Importa lo store
 
 export default {
     name: 'MangaList',

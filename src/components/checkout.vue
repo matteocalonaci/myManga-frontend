@@ -1,6 +1,7 @@
 <template>
   <div class="checkout-container">
-    <h1>Checkout</h1>
+    <div class="checkout">
+      <h1>Checkout</h1>
     <div class="row">
       <div class="col-md-4 order-md-2">
         <div class="cart-items">
@@ -112,6 +113,7 @@
 <button type="submit" class="submit-button" @click="submitOrder">Paga</button>
 </div>
 </div>
+    </div>
 </div>
 </template>
 
@@ -230,8 +232,14 @@ alert('Errore nella richiesta di pagamento.');
 
 <style scoped>
 .checkout-container {
-padding: 20px;
-max-width: 60rem;
+display: flex;
+justify-content: center;
+padding: 1rem
+}
+
+.checkout{
+padding: 1rem;
+width: 60rem;
 margin: auto;
 font-family: Arial, sans-serif;
 background-color: #f9f9f9;
