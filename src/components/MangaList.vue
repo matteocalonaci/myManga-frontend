@@ -172,6 +172,7 @@ export default {
     border: 1px solid #ccc;
 }
 
+
 .card-container {
     display: flex;
     flex-wrap: wrap;

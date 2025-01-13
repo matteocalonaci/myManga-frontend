@@ -14,11 +14,14 @@
     "bootstrap-vue": "^2.23.1",
     "braintree-web": "^3.112.1",
     "braintree-web-drop-in": "^1.43.0",
+    "jquery": "^3.7.1",
     "mitt": "^3.0.1",
+    "select2": "^4.1.0-rc.0",
     "sweetalert2": "^11.6.13",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5",
-    "vue-toastification": "^2.0.0-rc.5"
+    "vue-toastification": "^2.0.0-rc.5",
+    "vue3-select": "^0.1.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
